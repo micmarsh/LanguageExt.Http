@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "LanguageExt.Http/1.0.0": {
+        "dependencies": {
+          "LanguageExt.Core": "5.0.0-beta-54"
+        },
+        "runtime": {
+          "LanguageExt.Http.dll": {}
+        }
+      },
+      "LanguageExt.Core/5.0.0-beta-54": {
+        "runtime": {
+          "lib/net8.0/LanguageExt.Core.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "LanguageExt.Http/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LanguageExt.Core/5.0.0-beta-54": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hjEB7AbVt5fhjXDHalBwW+gz6cw2PfLT6R20NMUkEnt6Yii74Hdp7TBHjAcLkYNgsrKikk+wuyRTDB426kKmLg==",
+      "path": "languageext.core/5.0.0-beta-54",
+      "hashPath": "languageext.core.5.0.0-beta-54.nupkg.sha512"
+    }
+  }
+}

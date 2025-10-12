@@ -1,0 +1,12 @@
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/obj/Debug/net8.0/LanguageExt.Http.csproj.AssemblyReference.cache
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/obj/Debug/net8.0/LanguageExt.Http.GeneratedMSBuildEditorConfig.editorconfig
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/obj/Debug/net8.0/LanguageExt.Http.AssemblyInfoInputs.cache
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/obj/Debug/net8.0/LanguageExt.Http.AssemblyInfo.cs
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/obj/Debug/net8.0/LanguageExt.Http.csproj.CoreCompileInputs.cache
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/bin/Debug/net8.0/LanguageExt.Http.deps.json
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/bin/Debug/net8.0/LanguageExt.Http.dll
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/bin/Debug/net8.0/LanguageExt.Http.pdb
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/obj/Debug/net8.0/LanguageExt.Http.dll
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/obj/Debug/net8.0/refint/LanguageExt.Http.dll
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/obj/Debug/net8.0/LanguageExt.Http.pdb
+/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/obj/Debug/net8.0/ref/LanguageExt.Http.dll

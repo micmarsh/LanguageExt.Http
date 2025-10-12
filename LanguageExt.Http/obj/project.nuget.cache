@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "mlSfahzeTrE=",
+  "success": true,
+  "projectFilePath": "/home/michael/RiderProjects/LanguageExt.Http/LanguageExt.Http/LanguageExt.Http.csproj",
+  "expectedPackageFiles": [
+    "/home/michael/.nuget/packages/languageext.core/5.0.0-beta-54/languageext.core.5.0.0-beta-54.nupkg.sha512"
+  ],
+  "logs": []
+}
