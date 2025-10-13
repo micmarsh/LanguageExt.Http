@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LanguageExt.Http")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d04cb2b55017eab6be456c334f04badd89e302b6")]
 [assembly: System.Reflection.AssemblyProductAttribute("LanguageExt.Http")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LanguageExt.Http")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
