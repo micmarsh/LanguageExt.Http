@@ -15,7 +15,7 @@ public partial class Http
                     .Client
                     .GetAsync(url,
                         option.IfNone(httpEnv.CompletionOption.IfNone(HttpCompletionOption.ResponseContentRead)),
-                        httpEnv.Token.IfNone(env.Token))));
+                        env.Token)));
 
     // todo cancellation token argument for these? May be a bit much to keep track of for priority?
     public static Http<HttpResponseMessage> get(Uri url, Option<HttpCompletionOption> option = default) =>
@@ -24,7 +24,7 @@ public partial class Http
     public static K<M, string> readContentAsString<M>(HttpResponseMessage message)
         where M : Readable<M, HttpEnv>, MonadIO<M>
         => ask<M>().Bind(httpEnv => liftIO(env =>
-            message.Content.ReadAsStringAsync(httpEnv.Token.IfNone(env.Token)))
+            message.Content.ReadAsStringAsync(env.Token))
         );
     
     public static Http<string> readContentAsString(HttpResponseMessage message) => 
@@ -33,7 +33,7 @@ public partial class Http
     public static K<M, Stream> readContentAsStream<M>(HttpResponseMessage message)
         where M : Readable<M, HttpEnv>, MonadIO<M>
         => ask<M>().Bind(httpEnv => liftIO(env =>
-            message.Content.ReadAsStreamAsync(httpEnv.Token.IfNone(env.Token)))
+            message.Content.ReadAsStreamAsync(env.Token))
         );
     
     public static Http<Stream> readContentAsStream(HttpResponseMessage message) => 

@@ -5,12 +5,24 @@ namespace LanguageExt;
 
 public record Http<A>(ReaderT<HttpEnv, IO, A> run) : Fallible<Http<A>, Http, Error, A>
 {
+    /// <summary>
+    /// "Runs" the Http action, returning an IO.
+    /// If you need to thread a <see cref="CancellationToken"/> through your computation,
+    /// utilize the returned <see cref="IO"/>'s <see cref="EnvIO"/> when calling its Run or RunAsync
+    /// </summary>
     public IO<A> Run(HttpEnv env) => run.runReader(env).As();
     
+    /// <summary>
+    /// "Runs" the Http action, returning an IO.
+    /// If you need to thread a <see cref="CancellationToken"/> through your computation,
+    /// utilize the returned <see cref="IO"/>'s <see cref="EnvIO"/> when calling its Run or RunAsync
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="option"></param>
+    /// <returns></returns>
     public IO<A> Run(Option<HttpClient> client = default, 
-        Option<HttpCompletionOption> option = default,
-        Option<CancellationToken> token = default) => 
-        Run(new HttpEnv(client.IfNone(new HttpClient()), option, token)).As();
+        Option<HttpCompletionOption> option = default) => 
+        Run(new HttpEnv(client.IfNone(new HttpClient()), option)).As();
 
     public static implicit operator Http<A>(Fail<Error> fail) => Http.Fail<A>(fail.Value).As();
 
