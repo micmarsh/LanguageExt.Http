@@ -1,0 +1,3 @@
+* Add put, patch, delete etc. re-using infra from post?
+* That option in HttpEnv should be axed?
+* Concrete type SelectManys + Select (+ Bind, Map)?

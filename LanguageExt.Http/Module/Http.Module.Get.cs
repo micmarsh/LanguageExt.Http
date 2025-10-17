@@ -7,8 +7,8 @@ public partial class Http
 {
     public static K<M, HttpResponseMessage> get<M>([StringSyntax("Uri")] string url, Option<HttpCompletionOption> option = default)
         where M : Readable<M, HttpEnv>, MonadIO<M>
-        => from httpEnv in ask<M>()
-            from uri in parseUri<IO>(url).As()
+        =>  from uri in parseUri<IO>(url).As()
+            from httpEnv in ask<M>()
             from response in getAsIO(uri, option, httpEnv)
             select response;
     
