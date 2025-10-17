@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using LanguageExt.Traits;
-using static LanguageExt.Prelude;
 
 namespace LanguageExt;
 
