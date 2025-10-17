@@ -1,2 +1,3 @@
 * That option in HttpEnv should be axed?
 * Concrete type SelectManys + Select (+ Bind, Map)?
+* (maybe much later) helper utlities for constructing requests?
