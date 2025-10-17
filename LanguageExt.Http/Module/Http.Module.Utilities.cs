@@ -8,8 +8,8 @@ public partial class Http
     public static K<M, HttpEnv> ask<M>() where M : Readable<M, HttpEnv> => Readable.ask<M, HttpEnv>();
 
     public static K<M, string> readContentAsString<M>(HttpResponseMessage message)
-        where M : Readable<M, HttpEnv>, MonadIO<M>
-        => ask<M>().Bind(httpEnv => liftIO(env =>
+        where M : MonadIO<M>
+        => MonadIO.liftIO<M, string>(IO.liftAsync(env =>
             message.Content.ReadAsStringAsync(env.Token))
         );
     
@@ -17,8 +17,8 @@ public partial class Http
         readContentAsString<Http>(message).As();
         
     public static K<M, Stream> readContentAsStream<M>(HttpResponseMessage message)
-        where M : Readable<M, HttpEnv>, MonadIO<M>
-        => ask<M>().Bind(httpEnv => liftIO(env =>
+        where M : MonadIO<M>
+        => MonadIO.liftIO<M, Stream>(IO.liftAsync(env =>
             message.Content.ReadAsStreamAsync(env.Token))
         );
     
