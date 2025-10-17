@@ -24,6 +24,23 @@ public record Http<A>(ReaderT<HttpEnv, IO, A> run) : Fallible<Http<A>, Http, Err
         Option<HttpCompletionOption> option = default) => 
         Run(new HttpEnv(client.IfNone(new HttpClient()), option)).As();
 
+    public Http<B> Map<B>(Func<A, B> f) => this.Kind().Map(f).As();
+    public Http<B> Select<B>(Func<A, B> f) => Map(f);
+
+    public Http<B> Bind<B>(Func<A, Http<B>> bind) => this.Kind().Bind(bind).As();
+
+    public Http<C> SelectMany<B, C>(Func<A, Http<B>> bind, Func<A, B, C> project) =>
+        Bind(a => bind(a).Map(b => project(a, b)));
+    
+    public Http<C> SelectMany<B, C>(Func<A, K<Http, B>> bind, Func<A, B, C> project) =>
+        SelectMany(a => bind(a).As(), project);
+
+    public Http<C> SelectMany<B, C>(Func<A, IO<B>> bind, Func<A, B, C> project) =>
+        Bind(a => MonadIO.liftIO<Http, B>(bind(a)).Map(b => project(a, b)).As());
+    
+    public Http<C> SelectMany<B, C>(Func<A, K<IO, B>> bind, Func<A, B, C> project) =>
+        SelectMany(a => bind(a).As(), project);
+    
     public static implicit operator Http<A>(Fail<Error> fail) => Http.Fail<A>(fail.Value).As();
 
     public static implicit operator Http<A>(Pure<A> fail) => Applicative.pure<Http, A>(fail.Value).As();
