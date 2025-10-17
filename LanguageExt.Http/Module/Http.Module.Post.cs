@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using LanguageExt.Traits;
 using static LanguageExt.Prelude;
 
@@ -5,7 +6,7 @@ namespace LanguageExt;
 
 public partial class Http
 {
-    public static K<M, HttpResponseMessage> post<M>(string url, HttpContent content)
+    public static K<M, HttpResponseMessage> post<M>([StringSyntax("Uri")] string url, HttpContent content)
         where M : Readable<M, HttpEnv>, MonadIO<M>
         => from httpEnv in ask<M>()
             from uri in parseUri<IO>(url).As()
@@ -19,7 +20,7 @@ public partial class Http
     public static Http<HttpResponseMessage> post(Uri url, HttpContent content) =>
         post<Http>(url, content).As();
     
-    public static Http<HttpResponseMessage> post(string url, HttpContent content) =>
+    public static Http<HttpResponseMessage> post([StringSyntax("Uri")] string url, HttpContent content) =>
         post<Http>(url, content).As();
     
     private static IO<HttpResponseMessage> postAsIO(Uri url, HttpContent content, HttpEnv httpEnv) =>

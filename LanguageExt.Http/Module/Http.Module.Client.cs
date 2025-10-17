@@ -2,7 +2,6 @@ namespace LanguageExt;
 
 public partial class Http
 {
-    
     public static HttpClient client(Func<HttpRequestMessage, CancellationToken, HttpResponseMessage> sendAsync) =>
         new (new MessageHandler((m, t) => Task.FromResult(sendAsync(m, t))));
     

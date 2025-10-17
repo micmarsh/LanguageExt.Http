@@ -1,10 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using LanguageExt.Traits;
 
 namespace LanguageExt;
 
 public partial class Http
 {
-    public static K<M, HttpResponseMessage> get<M>(string url, Option<HttpCompletionOption> option = default)
+    public static K<M, HttpResponseMessage> get<M>([StringSyntax("Uri")] string url, Option<HttpCompletionOption> option = default)
         where M : Readable<M, HttpEnv>, MonadIO<M>
         => from httpEnv in ask<M>()
             from uri in parseUri<IO>(url).As()
@@ -18,7 +19,7 @@ public partial class Http
     public static Http<HttpResponseMessage> get(Uri url, Option<HttpCompletionOption> option = default) =>
         get<Http>(url, option).As();
     
-    public static Http<HttpResponseMessage> get(string url, Option<HttpCompletionOption> option = default) =>
+    public static Http<HttpResponseMessage> get([StringSyntax("Uri")] string url, Option<HttpCompletionOption> option = default) =>
         get<Http>(url, option).As();
     
     private static IO<HttpResponseMessage> getAsIO(Uri url, Option<HttpCompletionOption> option, HttpEnv httpEnv) =>
