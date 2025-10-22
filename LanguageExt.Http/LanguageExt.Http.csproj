@@ -4,13 +4,15 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageVersion>0.1.0-alpha-1</PackageVersion>
+        <PackageVersion>0.1.0-alpha-3</PackageVersion>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-
+        <PackageReadmeFile>LICENSE</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="LanguageExt.Core" Version="5.0.0-beta-54" />
+      <None Include="README.md" Pack="true" PackagePath="\"/>
+      <None Include="LICENSE" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>
