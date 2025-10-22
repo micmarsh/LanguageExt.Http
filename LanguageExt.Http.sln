@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageExt.Http", "LanguageExt.Http\LanguageExt.Http.csproj", "{CEB7734D-AD3C-4044-9379-A67B5B844E46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageExt.Http.Testbed", "LanguageExt.Http.Testbed\LanguageExt.Http.Testbed.csproj", "{00A417D8-11E7-4E7B-8A2F-1FEB1B179F2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{CEB7734D-AD3C-4044-9379-A67B5B844E46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEB7734D-AD3C-4044-9379-A67B5B844E46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEB7734D-AD3C-4044-9379-A67B5B844E46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00A417D8-11E7-4E7B-8A2F-1FEB1B179F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00A417D8-11E7-4E7B-8A2F-1FEB1B179F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00A417D8-11E7-4E7B-8A2F-1FEB1B179F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00A417D8-11E7-4E7B-8A2F-1FEB1B179F2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

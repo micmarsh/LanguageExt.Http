@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <PackageVersion>0.1.0-alpha-3</PackageVersion>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageReadmeFile>LICENSE</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
     </PropertyGroup>
 
     <ItemGroup>
