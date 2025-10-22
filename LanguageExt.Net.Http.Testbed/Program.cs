@@ -1,12 +1,18 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using LanguageExt;
+using LanguageExt.Net;
 using LanguageExt.Traits;
-using static LanguageExt.Http;
+using static LanguageExt.Net.Http;
 
 var withInt = Readable.ask<MyApp, int>();
 
-var got = get<MyApp>("https://example.com");
+var got =
+    from response in get<MyApp>("https://example.com")
+    from client in Readable.ask<MyApp, HttpClient>()
+    from number in Readable.ask<MyApp, int>()
+    from yo in IO.liftAsync(env => client.GetAsync($"http://example.com/{number}", env.Token))
+    select yo.EnsureSuccessStatusCode();
 
 public record Config(int MagicNumber, HttpEnv Http, string MagicText);
 
@@ -15,6 +21,7 @@ public record MyApp<A>(ReaderT<Config, IO, A> run) : K<MyApp, A>;
 public class MyApp: Deriving.MonadUnliftIO<MyApp, ReaderT<Config, IO>>,
     Deriving.Readable<MyApp, Config, ReaderT<Config, IO>>,
     SubReadable<MyApp, Config, HttpEnv>,
+    SubReadable<MyApp, Config, HttpClient>,
     SubReadable<MyApp, Config, int>
 {
     public static K<ReaderT<Config, IO>, A> Transform<A>(K<MyApp, A> fa)
@@ -36,6 +43,11 @@ public class MyApp: Deriving.MonadUnliftIO<MyApp, ReaderT<Config, IO>>,
     static int SubReadable<MyApp, Config, int>.GetInner(Config env)
     {
         return env.MagicNumber;
+    }
+
+    static HttpClient SubReadable<MyApp, Config, HttpClient>.GetInner(Config env)
+    {
+        return env.Http.Client;
     }
 }
 

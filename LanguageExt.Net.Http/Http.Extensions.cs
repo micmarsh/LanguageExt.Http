@@ -1,6 +1,6 @@
 using LanguageExt.Traits;
 
-namespace LanguageExt;
+namespace LanguageExt.Net;
 
 public static class HttpExt
 {

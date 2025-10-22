@@ -5,10 +5,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>LanguageExt.Http.Testbed</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LanguageExt.Http\LanguageExt.Http.csproj" />
+      <ProjectReference Include="..\LanguageExt.Net.Http\LanguageExt.Net.Http.csproj" />
     </ItemGroup>
 
 </Project>

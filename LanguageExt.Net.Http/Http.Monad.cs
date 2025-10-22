@@ -1,7 +1,7 @@
 using LanguageExt.Common;
 using LanguageExt.Traits;
 
-namespace LanguageExt;
+namespace LanguageExt.Net;
 
 public partial class Http :
     Deriving.Readable<Http, HttpEnv, ReaderT<HttpEnv, IO>>,
