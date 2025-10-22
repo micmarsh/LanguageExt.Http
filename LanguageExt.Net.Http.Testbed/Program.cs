@@ -20,9 +20,9 @@ public record MyApp<A>(ReaderT<Config, IO, A> run) : K<MyApp, A>;
 
 public class MyApp: Deriving.MonadUnliftIO<MyApp, ReaderT<Config, IO>>,
     Deriving.Readable<MyApp, Config, ReaderT<Config, IO>>,
-    SubReadable<MyApp, Config, HttpEnv>,
-    SubReadable<MyApp, Config, HttpClient>,
-    SubReadable<MyApp, Config, int>
+    CanRead<MyApp, Config, HttpEnv>,
+    CanRead<MyApp, Config, HttpClient>,
+    CanRead<MyApp, Config, int>
 {
     public static K<ReaderT<Config, IO>, A> Transform<A>(K<MyApp, A> fa)
     {
@@ -40,24 +40,25 @@ public class MyApp: Deriving.MonadUnliftIO<MyApp, ReaderT<Config, IO>>,
         return env.Http;
     }
 
-    static int SubReadable<MyApp, Config, int>.GetInner(Config env)
+    static int CanRead<MyApp, Config, int>.GetInner(Config env)
     {
         return env.MagicNumber;
     }
 
-    static HttpClient SubReadable<MyApp, Config, HttpClient>.GetInner(Config env)
+    static HttpClient CanRead<MyApp, Config, HttpClient>.GetInner(Config env)
     {
         return env.Http.Client;
     }
 }
 
-public interface SubReadable<Self, OuterEnv, InnerEnv> : Readable<Self, InnerEnv>
+public interface CanRead<Self, OuterEnv, InnerEnv> : Readable<Self, InnerEnv>
     where Self : 
     //Functor<Self>,
-    SubReadable<Self, OuterEnv, InnerEnv>,
+    CanRead<Self, OuterEnv, InnerEnv>,
     Readable<Self, OuterEnv>
 {
     public static abstract InnerEnv GetInner(OuterEnv env);
+    public static abstract OuterEnv SetInner(OuterEnv outer, InnerEnv inner);
 
     static K<Self, InnerEnv> Readable<Self, InnerEnv>.Ask =>
         //Readable.ask<Self, OuterEnv>().Map(Self.GetInner);
@@ -68,6 +69,6 @@ public interface SubReadable<Self, OuterEnv, InnerEnv> : Readable<Self, InnerEnv
 
     // todo need to test for this, not quite sure what's going on?
     static K<Self, A> Readable<Self, InnerEnv>.Local<A>(Func<InnerEnv, InnerEnv> f, K<Self, A> ma) =>
-        Readable.local(f, ma);
+        Self.Local(outer => Self.SetInner(outer, f(Self.GetInner(outer))), ma);
 }
 
