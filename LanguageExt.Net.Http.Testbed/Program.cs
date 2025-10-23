@@ -10,6 +10,14 @@ using static LanguageExt.Net.Http;
 using static LanguageExt.Prelude;
 using Http = LanguageExt.Http;
 
+// ***** BEGIN SHARED HELPER UTILITIES (used in both implementations)  *****
+
+HttpResponseMessage ExecutePostRequest(HttpRequestMessage request)
+{
+    Console.WriteLine($"Saving updated user {request.RequestUri}");
+    return new HttpResponseMessage(HttpStatusCode.OK);
+}
+
 var testClient = Http.client(request =>
 {
     var path = request.RequestUri.PathAndQuery;
@@ -23,7 +31,7 @@ var testClient = Http.client(request =>
         {
             Content = new ByteArrayContent(Encoding.ASCII.GetBytes($"User-{int.Parse(path.Split("/").Last())}"))
         },
-        "POST" => new HttpResponseMessage(HttpStatusCode.OK),
+        "POST" => ExecutePostRequest(request),
         _ => throw new InvalidOperationException(request.Method.Method)
     };
 });
@@ -33,6 +41,11 @@ User ParseUser(string serialized) => new User(serialized, int.Parse(serialized.S
 string SerializeUser(User user) => user.ToString();
 
 const int maxRetryAttempts = 3;
+
+// ***** END SHARED HELPER UTILITIES *****
+
+
+// ***** BEGIN IMPERATIVE IMPLEMENTATION *****
 
 var retryPolicy = Policy<HttpResponseMessage>
     .Handle<Exception>()
@@ -80,7 +93,13 @@ async Task UpdateAllUsers(HttpClient client, CancellationToken token)
     }
 }
 
+Console.WriteLine("RUN IMPERATIVE PROGRAM");
 await UpdateAllUsers(testClient, default);
+
+// ***** END IMPERATIVE IMPLEMENTATION *****
+
+
+// ***** BEGIN FUNCTIONAL IMPLEMENTATION *****
 
 var retrySchedule = Schedule.linear(1.Seconds()).Take(maxRetryAttempts);
 
@@ -100,6 +119,7 @@ var updateAllUsers =
     from _ in users.Traverse(u => updateUser(u).RetryIO(retrySchedule))
     select unit;
 
+Console.WriteLine("RUN FUNCTIONAL PROGRAM");
 await updateAllUsers
     .Run(testClient)
     .Catch(err =>
@@ -108,6 +128,10 @@ await updateAllUsers
         return unit;
     })
     .RunAsync(EnvIO.New(token: default));
+
+// ***** END  FUNCTIONAL IMPLEMENTATION *****
+
+// ***** BEGIN HELPER TYPES (used in both implementations) *****
 
 public record UserId(int Value);
 public record User(string Name, int Id);
