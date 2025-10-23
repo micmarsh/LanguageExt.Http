@@ -1,3 +1,4 @@
+using System.Text;
 using LanguageExt.Traits;
 using static LanguageExt.Prelude;
 
@@ -42,5 +43,7 @@ public partial class Http
     
     public static Http<HttpResponseMessage> ensureSuccessStatus(HttpResponseMessage r) =>
         ensureSuccessStatus<Http>(r).As();
-    
+
+    public static HttpContent content(string value) =>
+        new ByteArrayContent(Encoding.ASCII.GetBytes(value));
 }

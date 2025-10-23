@@ -12,4 +12,8 @@
       <ProjectReference Include="..\LanguageExt.Net.Http\LanguageExt.Net.Http.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Polly" Version="8.6.4" />
+    </ItemGroup>
+
 </Project>
