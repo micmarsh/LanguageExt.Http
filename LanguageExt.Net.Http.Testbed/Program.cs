@@ -56,9 +56,9 @@ async Task<IEnumerable<UserId>> GetAllUserIds(HttpClient httpClient, Cancellatio
     return ParseUserIds(await userIdResponse.Content.ReadAsStringAsync(cancellationToken));
 }
 
-async Task<User[]> GetAllUsers(IEnumerable<UserId> enumerable, HttpClient client, CancellationToken token)
+async Task<User[]> GetAllUsers(IEnumerable<UserId> ids, HttpClient client, CancellationToken token)
 {
-    var fullUserResponseTasks = enumerable.Select<UserId, Task<HttpResponseMessage>>(id => client.GetAsync($"http://api.url/user/{id.Value}", token));
+    var fullUserResponseTasks = ids.Select<UserId, Task<HttpResponseMessage>>(id => client.GetAsync($"http://api.url/user/{id.Value}", token));
     var fullUserResponses = await Task.WhenAll(fullUserResponseTasks);
     var fullUserTasks =
         fullUserResponses.Select(async resp => ParseUser(await resp.Content.ReadAsStringAsync(token)));
@@ -109,33 +109,10 @@ await updateAllUsers
     })
     .RunAsync(EnvIO.New(token: default));
 
-    
+
 
 public record UserId(int Value);
 public record User(string Name, int Id);
-
-
-public record Config(int MagicNumber, HttpEnv Http, string MagicText)
-    : HasHttpClient
-{
-    public HttpClient Client => Http.Client; 
-}
-
-public record MyApp<A>(ReaderT<Config, IO, A> run) : K<MyApp, A>;
-
-public class MyApp: Deriving.MonadUnliftIO<MyApp, ReaderT<Config, IO>>,
-    Deriving.Readable<MyApp, Config, ReaderT<Config, IO>>
-{
-    public static K<ReaderT<Config, IO>, A> Transform<A>(K<MyApp, A> fa)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static K<MyApp, A> CoTransform<A>(K<ReaderT<Config, IO>, A> fa)
-    {
-        throw new NotImplementedException();
-    }
-}
 
 public interface ReadableState<Self, S> : Readable<Self, S>
     where Self : ReadableState<Self, S>, Stateful<Self, S>, Monad<Self>
