@@ -2,21 +2,34 @@
 
 A functional wrapper around HttpClient intended to integrate into LangagueExt V5 based workflows.
 
+Provides the expected methods (`get`, `post`, `delete`, etc.) returning `Http<HttpResponseMessage>`, an "Http Monad"
 ## Rationale
+If you're already convinced of the general preferability of the functional approach, you probably don't need this `Rationale` section.
 
-Provides the expected methods (`get`, `post`, `delete`, etc.) returning a `Http<HttpResponseMessage>`, an "Http Monad"
+If you're not convinced but curious, check out the [code cleanup project](), noting the differences between the functional and imperative approaches, not just in total lines of code, but also the greater simplicity[^1] of nearly every part of the functional approach.
 
-#### TODO AXE THIS SECTION FOR A CODE EXAMPLE, IMPERATIVE VS. THIS, THAT EXERCISES ALL POSSIBLITIES?
-This monad is a `Fallible` wrapper around `ReaderT<HttpEnv, IO>`,  (and `HttpEnv` is just a wrapper around `HttpClient`) meaning we get a few benefits from this approach
-* Ability to utilize modular and generic error handling with `Fallible`
-* Lazy execution
-* Ability to utilize all of the `UnliftMonadIO` goodies: `Retry`, `Repeat`, `Fork`, etc.
-* Enables threading of `HttpClient` instances in a "reader monad style"
-  * More readable code (no passing `HttpClient` instances down call stacks)
-  * Allows best-practice `HttpClient` instance management from caller depending on application (socket exhaustion issue)
-  * Easier testing (see `client` helper methods as well)
+I may create a more dedicated "literate coding" style writeup of the above in the future (as of 10/23/2025), but for now hopefully the code can speak for iself.
+
+[^1] Simplicity in the [Rich Hickey sense of the word](https://www.youtube.com/watch?v=SxdOUGdseq4), it may not be _easy_ at first if you're not familiar with the concepts!
 
 ## Usage
+The `Http` monad implements and thus gives us
+* `Monad`, for basic sequencing and composition, `Bind` (with LINQ syntax) and `Traverse` being the bread and butter of most of what you'll do
+* `Fallible`, for generalizable and modular error handling
+* `MonadUnliftIO` for not only lifting arbitrary IO operations (such as debuggings), but also access to `Retry`, `Fork`, `Repeat` and related goodes
+* `Readable`, to enable threading of an `HttpClient` throughout the application
+  * If you need to thread `CancellationToken` as well, you can utilize `IO`'s built-in `EnvIO`
 
+You can refer to [the examples](code cleanup project with lines highlighted) to see most of the above in action.
 
-## TODO fill out this README and supporting docs
+However, since a concrete `Http` type is an obstacle to composition in large applications, nearly every method in this library has both an `Http`-based and generalized version, for exmaple
+* "The basics" (`get`, `post`, `delete`, etc.), can be generalized to any `MonadIO` that implements `Readable` for an `Env` that implements this library's `HasHttpClient` interface
+* `parseUri` can be generalized to any `Fallible` `Applicative`
+* Response parsing methods such as `readContentAsStream` can be generalized to any `MonadIO`
+
+### Testing
+Mocking `HttpClient`s is a thorn in many peoples sides, so this library provides a `Http.client` method that, given a `Func<HttpResponseMessage, HttpResponseMessage>` ([or other overload](link Http.Module.Client)) handles all of the nasty business of dealing with an `HttpMessageHandler` for you.
+
+`client` combined with the natural structure of the "reader monad pattern" this follows should enable much smoother mocking of http functionality in general.
+
+Copyright 2025 Michael Marsh
