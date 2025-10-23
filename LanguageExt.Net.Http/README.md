@@ -13,6 +13,13 @@ I may create a more dedicated "literate coding" style writeup of the above in th
 [^1] Simplicity in the [Rich Hickey sense of the word](https://www.youtube.com/watch?v=SxdOUGdseq4), it may not be _easy_ at first if you're not familiar with the concepts!
 
 ## Usage
+Add `LanguageExt.Net.Http 0.1.0-alpha-2` on nuget.
+
+```csharp
+// add to GlobalUsings as appropriate
+using LanguageExt.Net;
+using static LanguageExt.Net.Http;
+```
 The `Http` monad implements and thus gives us
 * `Monad`, for basic sequencing and composition, `Bind` (with LINQ syntax) and `Traverse` being the bread and butter of most of what you'll do
 * `Fallible`, for generalizable and modular error handling
@@ -20,7 +27,7 @@ The `Http` monad implements and thus gives us
 * `Readable`, to enable threading of an `HttpClient` throughout the application
   * If you need to thread `CancellationToken` as well, you can utilize `IO`'s built-in `EnvIO`
 
-You can refer to [the examples](code cleanup project with lines highlighted) to see most of the above in action.
+You can refer to [the examples]() to see most of the above in action.
 
 However, since a concrete `Http` type is an obstacle to composition in large applications, nearly every method in this library has both an `Http`-based and generalized version, for exmaple
 * "The basics" (`get`, `post`, `delete`, etc.), can be generalized to any `MonadIO` that implements `Readable` for an `Env` that implements this library's `HasHttpClient` interface
@@ -28,7 +35,7 @@ However, since a concrete `Http` type is an obstacle to composition in large app
 * Response parsing methods such as `readContentAsStream` can be generalized to any `MonadIO`
 
 ### Testing
-Mocking `HttpClient`s is a thorn in many peoples sides, so this library provides a `Http.client` method that, given a `Func<HttpResponseMessage, HttpResponseMessage>` ([or other overload](link Http.Module.Client)) handles all of the nasty business of dealing with an `HttpMessageHandler` for you.
+Mocking `HttpClient`s is a thorn in many peoples sides, so this library provides a `Http.client` method that, given a `Func<HttpResponseMessage, HttpResponseMessage>` ( [or other overload]() ) handles all of the nasty business of dealing with an `HttpMessageHandler` for you.
 
 `client` combined with the natural structure of the "reader monad pattern" this follows should enable much smoother mocking of http functionality in general.
 
