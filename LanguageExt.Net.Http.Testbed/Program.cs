@@ -109,41 +109,8 @@ await updateAllUsers
     })
     .RunAsync(EnvIO.New(token: default));
 
-
-
 public record UserId(int Value);
 public record User(string Name, int Id);
-
-public interface ReadableState<Self, S> : Readable<Self, S>
-    where Self : ReadableState<Self, S>, Stateful<Self, S>, Monad<Self>
-{
-    static K<Self, A> Readable<Self, S>.Asks<A>(Func<S, A> f) => Stateful.gets<Self, S, A>(f);
-
-    static K<Self, A> Readable<Self, S>.Local<A>(Func<S, S> f, K<Self, A> ma) =>
-        from initial in Stateful.get<Self, S>()
-        from _1 in Stateful.modify<Self, S>(f)
-        from a in ma
-        from _2 in Stateful.put<Self, S>(initial)
-        select a;
-}
-
-public interface WritableState<Self, S> : Writable<Self, S>
-    where Self : WritableState<Self, S>, Stateful<Self, S>, Monad<Self>
-    where S : Monoid<S>
-{
-    static K<Self, Unit> Writable<Self, S>.Tell(S item) =>
-        Stateful.modify<Self, S>(s => s.Combine(item));
-
-    static K<Self, (A Value, S Output)> Writable<Self, S>.Listen<A>(K<Self, A> ma) =>
-        from output in Stateful.get<Self, S>()
-        from value in ma
-        select (value, output);
-
-    static K<Self, A> Writable<Self, S>.Pass<A>(K<Self, (A Value, Func<S, S> Function)> action) =>
-        from pair in action
-        from _ in Stateful.modify<Self, S>(pair.Function)
-        select pair.Value;
-}
 
 
 
