@@ -20,9 +20,8 @@ public record Http<A>(ReaderT<HttpEnv, IO, A> run) : Fallible<Http<A>, Http, Err
     /// <param name="client"></param>
     /// <param name="option"></param>
     /// <returns></returns>
-    public IO<A> Run(Option<HttpClient> client = default, 
-        Option<HttpCompletionOption> option = default) => 
-        Run(new HttpEnv(client.IfNone(new HttpClient()), option)).As();
+    public IO<A> Run(Option<HttpClient> client = default) => 
+        Run(new HttpEnv(client.IfNone(new HttpClient()))).As();
 
     public Http<B> Map<B>(Func<A, B> f) => this.Kind().Map(f).As();
     public Http<B> Select<B>(Func<A, B> f) => Map(f);

@@ -5,15 +5,15 @@ namespace LanguageExt.Net;
 
 public partial class Http
 {
-    public static K<M, HttpResponseMessage> send<M, Env>(HttpRequestMessage request, Option<HttpCompletionOption> option = default)
+    public static K<M, HttpResponseMessage> send<M, Env>(HttpRequestMessage request, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead)
         where M : Readable<M, Env>, MonadIO<M>
-        where Env : HasHttpClient, HasCompletionOption
-        => Readable.ask<M, Env>().Bind(httpEnv => sendAsIO<Env>(request, option, httpEnv));
+        where Env : HasHttpClient
+        => Readable.ask<M, Env>().Bind(httpEnv => sendAsIO(request, option, httpEnv));
 
-    public static Http<HttpResponseMessage> send(HttpRequestMessage request, Option<HttpCompletionOption> option = default) =>
+    public static Http<HttpResponseMessage> send(HttpRequestMessage request, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead) =>
         send<Http, HttpEnv>(request, option).As();
     
-    private static IO<HttpResponseMessage> sendAsIO<Env>(HttpRequestMessage request, Option<HttpCompletionOption> option, Env httpEnv)
-        where Env : HasHttpClient, HasCompletionOption
-        => IO.liftAsync(env => httpEnv.Client.SendAsync(request, resolveCompletion(option, httpEnv), env.Token));
+    private static IO<HttpResponseMessage> sendAsIO<Env>(HttpRequestMessage request, HttpCompletionOption option, Env httpEnv)
+        where Env : HasHttpClient
+        => IO.liftAsync(env => httpEnv.Client.SendAsync(request, option, env.Token));
 }

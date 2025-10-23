@@ -14,10 +14,9 @@ var got =
     select yo.EnsureSuccessStatusCode();
 
 public record Config(int MagicNumber, HttpEnv Http, string MagicText)
-    : HasHttpClient, HasCompletionOption
+    : HasHttpClient
 {
-    public HttpClient Client => Http.Client;
-    public Option<HttpCompletionOption> CompletionOption => Http.CompletionOption;
+    public HttpClient Client => Http.Client; 
 }
 
 public record MyApp<A>(ReaderT<Config, IO, A> run) : K<MyApp, A>;

@@ -1,16 +1,8 @@
 namespace LanguageExt.Net;
 
-public readonly record struct HttpEnv(
-    HttpClient Client,
-    Option<HttpCompletionOption> CompletionOption)
-    : HasCompletionOption, HasHttpClient ; 
+public readonly record struct HttpEnv(HttpClient Client) : HasHttpClient; 
 
 public interface HasHttpClient
 {
     HttpClient Client { get; }
-}
-
-public interface HasCompletionOption
-{
-    Option<HttpCompletionOption> CompletionOption { get; }
 }
