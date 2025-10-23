@@ -5,23 +5,26 @@ namespace LanguageExt.Net;
 
 public partial class Http
 {
-    public static K<M, HttpResponseMessage> patch<M>([StringSyntax("Uri")] string url, HttpContent content)
-        where M : Readable<M, HttpEnv>, MonadIO<M>
+    public static K<M, HttpResponseMessage> patch<M, Env>([StringSyntax("Uri")] string url, HttpContent content)
+        where M : Readable<M, Env>, MonadIO<M>
+        where Env : HasHttpClient
         =>  from uri in parseUri<IO>(url).As()
-            from httpEnv in ask<M>()
+            from httpEnv in Readable.ask<M, Env>()
             from response in patchAsIO(uri, content, httpEnv)
             select response;
         
-    public static K<M, HttpResponseMessage> patch<M>(Uri url, HttpContent content)
-        where M : Readable<M, HttpEnv>, MonadIO<M>
-        => ask<M>().Bind(httpEnv => patchAsIO(url, content, httpEnv));
+    public static K<M, HttpResponseMessage> patch<M, Env>(Uri url, HttpContent content)
+        where M : Readable<M, Env>, MonadIO<M>
+        where Env : HasHttpClient
+        => Readable.ask<M, Env>().Bind(httpEnv => patchAsIO(url, content, httpEnv));
 
     public static Http<HttpResponseMessage> patch(Uri url, HttpContent content) =>
-        patch<Http>(url, content).As();
+        patch<Http, HttpEnv>(url, content).As();
     
     public static Http<HttpResponseMessage> patch([StringSyntax("Uri")] string url, HttpContent content) =>
-        patch<Http>(url, content).As();
+        patch<Http, HttpEnv>(url, content).As();
     
-    private static IO<HttpResponseMessage> patchAsIO(Uri url, HttpContent content, HttpEnv httpEnv) =>
+    private static IO<HttpResponseMessage> patchAsIO<Env>(Uri url, HttpContent content, Env httpEnv) 
+        where Env : HasHttpClient  =>
         IO.liftAsync(env => httpEnv.Client.PatchAsync(url, content, env.Token));
 }
