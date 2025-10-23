@@ -5,7 +5,7 @@ namespace LanguageExt.Net;
 
 public partial class Http
 {
-    public static K<M, HttpEnv> ask<M>() where M : Readable<M, HttpEnv> => Readable.ask<M, HttpEnv>();
+    public static readonly Http<HttpEnv> ask = Readable.ask<Http, HttpEnv>().As();
 
     public static K<M, string> readContentAsString<M>(HttpResponseMessage message)
         where M : MonadIO<M>

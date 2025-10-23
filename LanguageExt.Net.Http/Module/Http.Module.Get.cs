@@ -26,7 +26,7 @@ public partial class Http
     
     private static IO<HttpResponseMessage> getAsIO<Env>(Uri url, Option<HttpCompletionOption> option, Env httpEnv)
         where Env : HasHttpClient, HasCompletionOption =>
-        IO.liftAsync(env => httpEnv.Client.GetAsync(url, resolveCompletion<Env>(option, httpEnv), env.Token));
+        IO.liftAsync(env => httpEnv.Client.GetAsync(url, resolveCompletion(option, httpEnv), env.Token));
 
     private static HttpCompletionOption resolveCompletion<Env>(Option<HttpCompletionOption> option, Env httpEnv)
         where Env : HasHttpClient, HasCompletionOption => 
