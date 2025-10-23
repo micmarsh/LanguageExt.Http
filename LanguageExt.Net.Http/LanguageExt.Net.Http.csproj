@@ -12,7 +12,7 @@
 
     <ItemGroup>
       <PackageReference Include="LanguageExt.Core" Version="5.0.0-beta-54" />
-      <None Include="README.md" Pack="true" PackagePath="\"/>
+      <None Include="../README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>
