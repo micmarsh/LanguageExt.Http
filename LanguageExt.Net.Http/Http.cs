@@ -31,6 +31,11 @@ public record Http<A>(ReaderT<HttpEnv, IO, A> run) : Fallible<Http<A>, Http, Err
     public Http<C> SelectMany<B, C>(Func<A, Http<B>> bind, Func<A, B, C> project) =>
         Bind(a => bind(a).Map(b => project(a, b)));
     
+    public Http<B> Bind<B>(Func<A, Ask<HttpEnv, B>> bind) => this.Kind().Bind(a => (Http<B>) bind(a)).As();
+
+    public Http<C> SelectMany<B, C>(Func<A, Ask<HttpEnv, B>> bind, Func<A, B, C> project) =>
+        Bind(a => ((Http<B>)bind(a)).Map(b => project(a, b)));
+    
     public Http<C> SelectMany<B, C>(Func<A, K<Http, B>> bind, Func<A, B, C> project) =>
         SelectMany(a => bind(a).As(), project);
 
@@ -55,4 +60,6 @@ public record Http<A>(ReaderT<HttpEnv, IO, A> run) : Fallible<Http<A>, Http, Err
     public static Http<A> operator |(Http<A> lhs, Fail<Error> rhs) => lhs | (Http<A>) rhs;
 
     public static Http<A> operator |(Http<A> lhs, CatchM<Error, Http, A> rhs) => lhs.Catch(rhs.Match, rhs.Action).As();
+
+    public static implicit operator Http<A>(Ask<HttpEnv, A> ask) => new (ask.ToReaderT<IO>());
 }
