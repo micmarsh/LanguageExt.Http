@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using LanguageExt.Traits;
 
-namespace LanguageExt.Net;
+namespace LanguageExt;
 
 public static class HttpExt
 {

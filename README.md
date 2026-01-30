@@ -1,24 +1,24 @@
 # LanguageExt HTTP
 
-A functional wrapper around HttpClient intended to integrate into LangagueExt V5 based workflows.
+A functional wrapper around HttpClient intended to integrate into LanguageExt V5 based workflows.
 
 Provides the expected methods (`get`, `post`, `delete`, etc.) returning `Http<HttpResponseMessage>`, an "Http Monad"
 ## Rationale
 If you're already convinced of the general preferability of the functional approach, you probably don't need this `Rationale` section.
 
-If you're not convinced but curious, check out the [code cleanup project](https://github.com/micmarsh/LanguageExt.Http/tree/master/LanguageExt.Net.Http.CodeCleanupExample), noting the differences between the functional and imperative approaches, not just in total lines of code, but also the greater simplicity[^1] of nearly every part of the functional approach.
+If you're not convinced but curious, check out the [code cleanup project](https://github.com/micmarsh/LanguageExt.Http/tree/master/LanguageExt.Net.Http.CodeCleanupExample/Program.cs), noting the differences between the functional and imperative approaches, not just in total lines of code, but also the greater simplicity[^1] of nearly every part of the functional approach.
 
 I may create a more dedicated "literate coding" style writeup of the above in the future (as of 10/23/2025), but for now hopefully the code can speak for iself.
 
 [^1] Simplicity in the [Rich Hickey sense of the word](https://www.youtube.com/watch?v=SxdOUGdseq4), it may not be _easy_ at first if you're not familiar with the concepts!
 
 ## Usage
-Add `LanguageExt.Net.Http 0.1.0-alpha-4` on nuget.
+Add `LanguageExt.Net.Http 1.0.0` on nuget.
 
 ```csharp
 // add to GlobalUsings as appropriate
-using LanguageExt.Net;
-using static LanguageExt.Net.Http;
+using LanguageExt;// <- you're probbably already using this
+using static LanguageExt.Http;
 ```
 The `Http` monad implements and thus gives us
 * `Monad`, for basic sequencing and composition, `Bind` (with LINQ syntax) and `Traverse` being the bread and butter of most of what you'll do

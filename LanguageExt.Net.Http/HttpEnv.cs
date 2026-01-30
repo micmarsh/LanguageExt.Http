@@ -1,4 +1,4 @@
-namespace LanguageExt.Net;
+namespace LanguageExt;
 
 public readonly record struct HttpEnv(HttpClient Client) : HasHttpClient; 
 

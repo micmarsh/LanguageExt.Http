@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using LanguageExt.Traits;
 
-namespace LanguageExt.Net;
+namespace LanguageExt;
 
 public partial class Http
 {

@@ -3,12 +3,10 @@
 using System.Net;
 using System.Text;
 using LanguageExt;
-using LanguageExt.Net;
 using LanguageExt.Traits;
 using Polly;
-using static LanguageExt.Net.Http;
+using static LanguageExt.Http;
 using static LanguageExt.Prelude;
-using Http = LanguageExt.Http;
 
 // ***** BEGIN SHARED HELPER UTILITIES (used in both implementations)  *****
 
@@ -116,18 +114,19 @@ Http<HttpResponseMessage> updateUser(User user) =>
 var updateAllUsers =
     from userIds in getAllUserIds
     from users in userIds.AsIterable().Traverse(getFullUser)
-    from _ in users.Traverse(u => updateUser(u).RetryIO(retrySchedule))
+    from threads in users.Traverse(u => updateUser(u).RetryIO(retrySchedule).ForkIO())
+    from _ in threads.Traverse(t => t.Await)
     select unit;
 
 Console.WriteLine("RUN FUNCTIONAL PROGRAM");
-await updateAllUsers
+updateAllUsers
     .Run(testClient)
     .Catch(err =>
     {
         Console.WriteLine($"Error updating all users: {err.ToException()}");
         return unit;
     })
-    .RunAsync(EnvIO.New(token: default));
+    .Run(EnvIO.New(token: default));
 
 // ***** END  FUNCTIONAL IMPLEMENTATION *****
 

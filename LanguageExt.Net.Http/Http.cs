@@ -1,7 +1,7 @@
 ﻿using LanguageExt.Common;
 using LanguageExt.Traits;
 
-namespace LanguageExt.Net;
+namespace LanguageExt;
 
 public record Http<A>(ReaderT<HttpEnv, IO, A> run) : Fallible<Http<A>, Http, Error, A>
 {

@@ -2,7 +2,7 @@ using System.Text;
 using LanguageExt.Traits;
 using static LanguageExt.Prelude;
 
-namespace LanguageExt.Net;
+namespace LanguageExt;
 
 public partial class Http
 {
