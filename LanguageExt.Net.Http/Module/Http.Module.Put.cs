@@ -16,7 +16,7 @@ public partial class Http
     public static K<M, HttpResponseMessage> put<M, Env>(Uri url, HttpContent content)
         where M : Readable<M, Env>, MonadIO<M>
         where Env : HasHttpClient
-        => Readable.ask<M, Env>().Bind(httpEnv => putAsIO(url, content, httpEnv));
+        => Readable.ask<M, Env>() >> (httpEnv => putAsIO(url, content, httpEnv));
 
     public static Http<HttpResponseMessage> put(Uri url, HttpContent content) =>
         put<Http, HttpEnv>(url, content).As();

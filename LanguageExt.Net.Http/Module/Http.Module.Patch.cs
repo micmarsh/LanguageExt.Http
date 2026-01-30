@@ -16,7 +16,7 @@ public partial class Http
     public static K<M, HttpResponseMessage> patch<M, Env>(Uri url, HttpContent content)
         where M : Readable<M, Env>, MonadIO<M>
         where Env : HasHttpClient
-        => Readable.ask<M, Env>().Bind(httpEnv => patchAsIO(url, content, httpEnv));
+        => Readable.ask<M, Env>() >> (httpEnv => patchAsIO(url, content, httpEnv));
 
     public static Http<HttpResponseMessage> patch(Uri url, HttpContent content) =>
         patch<Http, HttpEnv>(url, content).As();

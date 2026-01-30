@@ -8,7 +8,7 @@ public partial class Http
     public static K<M, HttpResponseMessage> send<M, Env>(HttpRequestMessage request, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead)
         where M : Readable<M, Env>, MonadIO<M>
         where Env : HasHttpClient
-        => Readable.ask<M, Env>().Bind(httpEnv => sendAsIO(request, option, httpEnv));
+        => Readable.ask<M, Env>() >> (httpEnv => sendAsIO(request, option, httpEnv));
 
     public static Http<HttpResponseMessage> send(HttpRequestMessage request, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead) =>
         send<Http, HttpEnv>(request, option).As();

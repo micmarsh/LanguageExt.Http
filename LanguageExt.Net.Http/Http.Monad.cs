@@ -6,7 +6,6 @@ namespace LanguageExt;
 public partial class Http :
     Deriving.Readable<Http, HttpEnv, ReaderT<HttpEnv, IO>>,
     Deriving.MonadUnliftIO<Http,  ReaderT<HttpEnv, IO>>,
-    Deriving.Choice<Http,  ReaderT<HttpEnv, IO>>,
     Fallible<Http>
 {
     public static K<ReaderT<HttpEnv, IO>, A> Transform<A>(K<Http, A> fa) => fa.As().run;

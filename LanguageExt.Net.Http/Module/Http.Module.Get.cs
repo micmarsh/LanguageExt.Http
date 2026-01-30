@@ -16,7 +16,7 @@ public partial class Http
     public static K<M, HttpResponseMessage> get<M, Env>(Uri url, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead)
         where M : Readable<M, Env>, MonadIO<M>
         where Env : HasHttpClient
-        => Readable.ask<M, Env>().Bind(httpEnv => getAsIO(url, option, httpEnv));
+        => Readable.ask<M, Env>() >> (httpEnv => getAsIO(url, option, httpEnv));
 
     public static Http<HttpResponseMessage> get(Uri url, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead) =>
         get<Http, HttpEnv>(url, option).As();

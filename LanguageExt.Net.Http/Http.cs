@@ -3,7 +3,7 @@ using LanguageExt.Traits;
 
 namespace LanguageExt;
 
-public record Http<A>(ReaderT<HttpEnv, IO, A> run) : Fallible<Http<A>, Http, Error, A>
+public record Http<A>(ReaderT<HttpEnv, IO, A> run) : K<Http, A>
 {
     /// <summary>
     /// "Runs" the Http action, returning an IO.
@@ -50,11 +50,7 @@ public record Http<A>(ReaderT<HttpEnv, IO, A> run) : Fallible<Http<A>, Http, Err
     public static implicit operator Http<A>(Pure<A> fail) => Applicative.pure<Http, A>(fail.Value).As();
 
     public static Http<A> operator |(Http<A> lhs, Http<A> rhs) => lhs.Catch(_ => true, _ => rhs).As();
-
-    static Http<A> Fallible<Http<A>, Http, Error, A>.operator |(K<Http, A> lhs, Http<A> rhs) => lhs.Catch(_ => true, _ => rhs).As();
-
-    static Http<A> Fallible<Http<A>, Http, Error, A>.operator |(Http<A> lhs, K<Http, A> rhs) => lhs.Catch(_ => true, _ => rhs).As();
-
+    
     public static Http<A> operator |(Http<A> lhs, Pure<A> rhs) => lhs | (Http<A>)rhs;
 
     public static Http<A> operator |(Http<A> lhs, Fail<Error> rhs) => lhs | (Http<A>) rhs;
