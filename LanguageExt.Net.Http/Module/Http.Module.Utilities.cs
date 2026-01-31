@@ -10,7 +10,7 @@ public partial class Http
 {
     public static readonly Http<HttpEnv> ask = Readable.ask<Http, HttpEnv>().As();
 
-    public static Http<A> Pure<A>(A item) => new(new ReaderT<HttpEnv, IO, A>(_ => item));
+    public static Http<A> Pure<A>(A item) => new(new ReaderT<HttpEnv, IO, A>(_ => IO.pure(item)));
     
     public static K<M, string> readContentAsString<M>(HttpResponseMessage message)
         where M : MonadIO<M>
@@ -31,26 +31,24 @@ public partial class Http
         readContentAsStream<Http>(message).As();
 
     public static K<F, Uri> parseUri<F>(string url) where F : Fallible<F>, Applicative<F>
-        => Try.lift(() => new Uri(url)).Match(F.Pure, F.Fail<Uri>);
+        => @try<F, Uri>(() => new Uri(url));
 
     public static Http<Uri> parseUri(string url) => parseUri<Http>(url).As();
 
     public static K<F, HttpResponseMessage> ensureSuccessStatus<F>(HttpResponseMessage r)
         where F : Fallible<F>, Applicative<F>
-        => Try.lift(() =>
-            {
-                r.EnsureSuccessStatusCode();
-                return r;
-            })
-            .Match(Applicative.pure<F, HttpResponseMessage>,
-                Fallible.error<F, HttpResponseMessage>);
+        => @try<F, HttpResponseMessage>(() =>
+        {
+            r.EnsureSuccessStatusCode();
+            return r;
+        });
     
     public static Http<HttpResponseMessage> ensureSuccessStatus(HttpResponseMessage r) =>
         ensureSuccessStatus<Http>(r).As();
 
     public static HttpContent content(string value) =>
         new ByteArrayContent(Encoding.ASCII.GetBytes(value));
-
+    
     public static K<M, A> @try<M, A>(Func<A> run) where M : Applicative<M>, Fallible<M>
         => Try.lift(run).Match(M.Pure, M.Fail<A>);
 
@@ -60,9 +58,9 @@ public partial class Http
         readContentAsStream(r) >> (stream => @try(() => JsonDocument.Parse(stream).RootElement));
     
     public static Http<Result> json<Result>(HttpResponseMessage r) =>
-        from stream in readContentAsStream(r)
-        from resultNull in @try(() => JsonSerializer.Deserialize<Result>(stream))
+        from str in readContentAsString(r)
+        from resultNull in @try(() => JsonSerializer.Deserialize<Result>(str))
         from result in Optional(resultNull).Match(Pure, () => 
-            Fail<Result>(Error.New($"Could not deserialize json result")))// todo actual result as string? Maybe just abondon stream then?
+            Fail<Result>(Error.New($"Could not deserialize json result {str}")))
         select result;
 }
