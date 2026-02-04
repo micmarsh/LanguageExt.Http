@@ -16,6 +16,8 @@ public static class HttpExt
     public static Http<C> SelectMany<A, B, C>(this Ask<HttpEnv, A> ask, Func<A, Http<B>> bind, Func<A, B, C> project) =>
         ((Http<A>)ask).SelectMany(bind, project);
     
+    public static Http.JsonWrapper Json(this object? value) => new (value);
+    
     extension<A, B>(K<Http, A> self)
     {
         /// <summary>

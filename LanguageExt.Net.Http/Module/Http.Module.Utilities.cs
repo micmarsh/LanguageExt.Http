@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using LanguageExt.Common;
@@ -48,6 +49,10 @@ public partial class Http
 
     public static HttpContent content(string value) =>
         new ByteArrayContent(Encoding.ASCII.GetBytes(value));
+    
+    public static HttpContent content(JsonWrapper value) => JsonContent.Create(value);
+
+    public record JsonWrapper(object? Value);
     
     public static K<M, A> @try<M, A>(Func<A> run) where M : Applicative<M>, Fallible<M>
         => Try.lift(run).Match(M.Pure, M.Fail<A>);
