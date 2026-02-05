@@ -1,5 +1,7 @@
 # LanguageExt HTTP
 
+### WIP I'm currently in the process of cleaning this up for a non-alpha release, some of this documentation may not be accurate
+
 A functional wrapper around HttpClient intended to integrate into LanguageExt V5 based workflows.
 
 Provides the expected methods (`get`, `post`, `delete`, etc.) returning `Http<HttpResponseMessage>`, an "Http Monad"
