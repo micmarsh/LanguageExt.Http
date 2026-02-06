@@ -11,7 +11,7 @@ public partial class Http
 {
     public static readonly Http<HttpEnv> ask = Readable.ask<Http, HttpEnv>().As();
 
-    public static Http<A> Pure<A>(A item) => new(new ReaderT<HttpEnv, IO, A>(_ => IO.pure(item)));
+    public static Http<A> Pure<A>(A item) => +Applicative.pure<Http, A>(item);
     
     public static K<M, string> readContentAsString<M>(HttpResponseMessage message)
         where M : MonadIO<M>
@@ -60,20 +60,28 @@ public partial class Http
     public static Http<A> @try<A>(Func<A> run) => +@try<Http, A>(run);
 
     
-    // todo different name for these "json"s? Maybe
-    public static Http<JsonElement> json(Stream stream) => @try(() => JsonDocument.Parse(stream).RootElement);
-    public static Http<JsonElement> json(string str) => @try(() => JsonDocument.Parse(str).RootElement);
+    public static Http<JsonElement> parse(Stream stream) => @try(() => JsonDocument.Parse(stream).RootElement);
+    public static Http<JsonElement> parse(string str) => @try(() => JsonDocument.Parse(str).RootElement);
     
     public static Http<Result> deserialize<Result>(Stream stream) => +deserialize<Http, Result>(stream);
     public static Http<Result> deserialize<Result>(string str) => +deserialize<Http, Result>(str);
+    public static Http<Result> deserialize<Result>(JsonElement json) => +deserialize<Http, Result>(json);
 
-    // todo totally separate lib with these generics, maybe with `Fin` default
-    public static K<F, JsonElement> json<F>(Stream stream) 
+
+    // todo totally separate lib with these generics, maybe with `Fin` default, and way better error messages
+    public static K<F, JsonElement> parse<F>(Stream stream) 
         where F : Fallible<F>, Applicative<F> 
         => @try<F, JsonElement>(() => JsonDocument.Parse(stream).RootElement);
-    public static K<F, JsonElement> json<F>(String str) 
+    public static K<F, JsonElement> parse<F>(String str) 
         where F : Fallible<F>, Applicative<F> 
         => @try<F, JsonElement>(() => JsonDocument.Parse(str).RootElement);
+
+    public static K<F, Result> deserialize<F, Result>(JsonElement json)
+        where F : Fallible<F>, Monad<F>
+        =>  from resultNull in @try<F, Result>(() => json.Deserialize<Result>())
+            from result in Optional(resultNull).Match(F.Pure, () => 
+                F.Fail<Result>(Error.New($"Could not convert json element {json.ValueKind} to {typeof(Result).Name}")))
+            select result;
     
     public static K<F, Result> deserialize<F, Result>(Stream stream)
         where F : Fallible<F>, Monad<F>
