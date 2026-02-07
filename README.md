@@ -60,7 +60,7 @@ get("http://example.com")
 However, since a concrete `Http` type is an obstacle to composition in large applications, nearly every method in this library has both an `Http`-based and generalized version, for exmaple
 * "The basics" (`get`, `post`, `delete`, etc.), can be generalized to any `MonadIO` that implements `Readable` for an `Env` that implements this library's `HasHttpClient` interface
 * `parseUri` can be generalized to any `Fallible` `Applicative`
-* Response parsing methods such as `readContentAsStream` can be generalized to any `MonadIO`
+* Response parsing methods such as `stream` can be generalized to any `MonadIO`
 
 For example, if we have the following hypothetical method
 ```csharp
@@ -71,7 +71,7 @@ K<M, Stream> getStreamWithDebug<M, Env>(string rawUri)
         from uri in parseUri<M>(rawUri)
         from rawResponse in get<M, Env>(uri)
         from _1 in IO.lift(() => Console.WriteLine($"Successful fetch from {rawUri}"))
-        from response in readContentAsStream<M>(rawResponse)
+        from response in stream<M>(rawResponse)
         from _2 in IO.lift(() => Console.WriteLine($"Successfully read as stream"))
         select response;
 ```

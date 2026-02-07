@@ -101,10 +101,10 @@ await UpdateAllUsers(testClient, default);
 
 var retrySchedule = Schedule.linear(1.Seconds()).Take(maxRetryAttempts);
 
-var getAllUserIds = get("http://api.url/users").Bind(readContentAsString).Map(ParseUserIds);
+var getAllUserIds = get("http://api.url/users").Bind(@string).Map(ParseUserIds);
 
 Http<User> getFullUser(UserId userId) => 
-    get($"http://api.url/user/{userId.Value}").Bind(readContentAsString)
+    get($"http://api.url/user/{userId.Value}").Bind(@string)
         .Map(ParseUser);
 
 Http<HttpResponseMessage> updateUser(User user) => 
