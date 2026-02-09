@@ -1,5 +1,5 @@
 ﻿
 using LanguageExtHttp.Examples;
 
-await CodeCleanupExample.Run();
-
+// await CodeCleanupExample.Run();
+JsonParsingExample.Run();
