@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageExt.Http", "LanguageExt.Http\LanguageExt.Http.csproj", "{CEB7734D-AD3C-4044-9379-A67B5B844E46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageExt.Http.Examples", "LanguageExt.Http.Examples\LanguageExt.Http.Examples.csproj", "{00A417D8-11E7-4E7B-8A2F-1FEB1B179F2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageExt.Examples", "LanguageExt.Examples\LanguageExt.Examples.csproj", "{00A417D8-11E7-4E7B-8A2F-1FEB1B179F2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
