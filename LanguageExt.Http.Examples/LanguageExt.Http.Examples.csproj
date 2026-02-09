@@ -5,7 +5,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>LanguageExt.Http.Testbed</RootNamespace>
+        <RootNamespace>LanguageExt.Examples</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
