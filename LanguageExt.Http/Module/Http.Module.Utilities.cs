@@ -96,7 +96,7 @@ public partial class Http
         =>
         from resultNull in @try<F, Result>(() => JsonSerializer.Deserialize<Result>(str))
         from result in Optional(resultNull).Match(F.Pure, () => 
-            F.Fail<Result>(Error.New($"Could not deserialize json result {str}")))
+            F.Fail<Result>(Error.New($"Could not deserialize json result {str} to {typeof(Result).Name}")))
         select result;
 
             
