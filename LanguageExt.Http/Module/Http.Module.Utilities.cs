@@ -98,4 +98,6 @@ public partial class Http
         from result in Optional(resultNull).Match(F.Pure, () => 
             F.Fail<Result>(Error.New($"Could not deserialize json result {str}")))
         select result;
+
+            
 }

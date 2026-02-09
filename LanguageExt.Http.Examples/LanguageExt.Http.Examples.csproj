@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LanguageExt.Net.Http\LanguageExt.Net.Http.csproj" />
+      <ProjectReference Include="..\LanguageExt.Http\LanguageExt.Http.csproj" />
     </ItemGroup>
 
     <ItemGroup>
