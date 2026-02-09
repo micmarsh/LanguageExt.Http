@@ -1,8 +1,9 @@
 using System.Net;
 using System.Text;
+using LanguageExt;
 using Polly;
 
-namespace LanguageExt.Examples;
+namespace LanguageExtHttp.Examples;
 using static LanguageExt.Http;
 using static LanguageExt.Prelude;
 

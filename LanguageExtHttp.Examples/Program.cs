@@ -1,5 +1,5 @@
 ﻿
-using LanguageExt.Examples;
+using LanguageExtHttp.Examples;
 
 await CodeCleanupExample.Run();
 
