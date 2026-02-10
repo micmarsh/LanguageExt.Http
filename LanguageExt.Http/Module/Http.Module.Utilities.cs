@@ -50,7 +50,7 @@ public partial class Http
     public static HttpContent content(string value) =>
         new ByteArrayContent(Encoding.ASCII.GetBytes(value));
     
-    public static HttpContent content(JsonWrapper value) => JsonContent.Create(value);
+    public static HttpContent content(JsonWrapper value) => JsonContent.Create(value.Value);
 
     public record JsonWrapper(object? Value);
     
@@ -88,7 +88,7 @@ public partial class Http
         =>
             from resultNull in @try<F, Result>(() => JsonSerializer.Deserialize<Result>(stream))
             from result in Optional(resultNull).Match(F.Pure, () => 
-                F.Fail<Result>(Error.New($"Could not deserialize json stream result")))
+                F.Fail<Result>(Error.New($"Could not deserialize json stream result to {typeof(Result).Name}")))
             select result;
     
     public static K<F, Result> deserialize<F, Result>(string str)
