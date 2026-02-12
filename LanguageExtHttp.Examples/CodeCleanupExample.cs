@@ -125,7 +125,7 @@ var updateAllUsers =
 
 Console.WriteLine("RUN FUNCTIONAL PROGRAM");
 updateAllUsers
-    .Run(testClient)
+    .RunIO(testClient)
     .Catch(err =>
     {
         Console.WriteLine($"Error updating all users: {err.ToException()}");

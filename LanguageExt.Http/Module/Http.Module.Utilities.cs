@@ -59,11 +59,4 @@ public partial class Http
     
     public static K<M, A> @try<M, A>(Func<A> run) where M : Applicative<M>, Fallible<M>
         => Try.lift(run).Match(M.Pure, M.Fail<A>);
-    
-    public static Http<JsonElement> parse(Stream stream) => @try(() => JsonDocument.Parse(stream).RootElement);
-    public static Http<JsonElement> parse(string str) => @try(() => JsonDocument.Parse(str).RootElement);
-    
-    public static Http<Result> deserialize<Result>(Stream stream) => +Json.deserialize<Http, Result>(stream);
-    public static Http<Result> deserialize<Result>(string str) => +Json.deserialize<Http, Result>(str);
-    public static Http<Result> cast<Result>(JsonElement json) => +Json.cast<Http, Result>(json);
 }

@@ -10,7 +10,7 @@ public record Http<A>(ReaderT<HttpEnv, IO, A> run) : K<Http, A>
     /// If you need to thread a <see cref="CancellationToken"/> through your computation,
     /// utilize the returned <see cref="IO"/>'s <see cref="EnvIO"/> when calling its Run or RunAsync
     /// </summary>
-    public IO<A> Run(HttpEnv env) => run.runReader(env).As();
+    public IO<A> RunIO(HttpEnv env) => run.runReader(env).As();
     
     /// <summary>
     /// "Runs" the Http action, returning an IO.
@@ -20,8 +20,8 @@ public record Http<A>(ReaderT<HttpEnv, IO, A> run) : K<Http, A>
     /// <param name="client"></param>
     /// <param name="option"></param>
     /// <returns></returns>
-    public IO<A> Run(Option<HttpClient> client = default) => 
-        Run(new HttpEnv(client.IfNone(new HttpClient()))).As();
+    public IO<A> RunIO(Option<HttpClient> client = default) => 
+        RunIO(new HttpEnv(client.IfNone(new HttpClient()))).As();
 
     public Http<B> Map<B>(Func<A, B> f) => this.Kind().Map(f).As();
     public Http<B> Select<B>(Func<A, B> f) => Map(f);
