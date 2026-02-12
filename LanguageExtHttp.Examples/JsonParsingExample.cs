@@ -18,14 +18,12 @@ public static class JsonParsingExample
 
         printFirstProduct.Run().Run();
 
-        // Technically a more details demo than above, but primarily of the dire need for nicer json
-        // parsing functions (key lookup, enumeration, etc.). Coming soon, God willing.
+        // Detail more intricate parsing of nested json structures
         var printAllTitles = get("https://dummyjson.com/products") >> stream >> parse >>
                              key<Http>("products") >>
                              (iterate<Http>) >>
-                             (arr => toSeq(arr).Kind().Traverse(deserialize<Product>)
-                                 .MapT(p => p.title))
-                             >> log;
+                             (elts => elts.Traverse(key<Http>("title") >> cast<string>))
+                             >> (elts => elts.Traverse(log));
 
         printAllTitles.Run().Run();
     }

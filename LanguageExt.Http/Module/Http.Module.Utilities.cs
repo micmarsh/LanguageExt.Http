@@ -65,5 +65,5 @@ public partial class Http
     
     public static Http<Result> deserialize<Result>(Stream stream) => +Json.deserialize<Http, Result>(stream);
     public static Http<Result> deserialize<Result>(string str) => +Json.deserialize<Http, Result>(str);
-    public static Http<Result> deserialize<Result>(JsonElement json) => +Json.deserialize<Http, Result>(json);
+    public static Http<Result> cast<Result>(JsonElement json) => +Json.cast<Http, Result>(json);
 }

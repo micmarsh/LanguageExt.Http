@@ -21,7 +21,7 @@ public static  class Json
         =>
             @try<F, JsonElement>(() => JsonDocument.Parse(str).RootElement);
 
-    public static K<F, Result> deserialize<F, Result>(JsonElement json)
+    public static K<F, Result> cast<F, Result>(JsonElement json)
         where F : Fallible<F>, Monad<F>
         =>  from resultNull in @try<F, Result>(() => json.Deserialize<Result>())
             from result in Prelude.Optional<Result>(resultNull).Match(F.Pure<Result>, 
