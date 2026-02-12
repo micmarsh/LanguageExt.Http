@@ -1,9 +1,8 @@
-using System.Text.Json;
-
 namespace LanguageExtHttp.Examples;
 using LanguageExt;
 using static LanguageExt.Http;
 using static LanguageExt.Prelude;
+using static LanguageExt.Json;
 
 public static class JsonParsingExample
 {
@@ -22,8 +21,8 @@ public static class JsonParsingExample
         // Technically a more details demo than above, but primarily of the dire need for nicer json
         // parsing functions (key lookup, enumeration, etc.). Coming soon, God willing.
         var printAllTitles = get("https://dummyjson.com/products") >> stream >> parse >>
-                             (json => @try(() => json.GetProperty("products"))) >>
-                             (json => @try(json.EnumerateArray)) >>
+                             key<Http>("products") >>
+                             (iterate<Http>) >>
                              (arr => toSeq(arr).Kind().Traverse(deserialize<Product>)
                                  .MapT(p => p.title))
                              >> log;
