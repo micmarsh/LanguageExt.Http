@@ -1,3 +1,6 @@
+using System.Net;
+using System.Net.Http.Json;
+
 namespace LanguageExtHttp.Examples;
 using LanguageExt;
 using static LanguageExt.Http;
@@ -30,22 +33,36 @@ public static class JsonParsingExample
 
         printAllTitles.RunIO().Run();
 
-        // Not very efficient in terms of netowrk requests, but showing off monadic reuse and sending Json requests
+        // Not very efficient in terms of network requests, but showing off monadic reuse and sending Json requests
         var fourthProduct = 
             allProducts >> index(3) >> cast<Product>;
+
+        Http<Product> sendUpdateRequest(Product updated) =>
+            patch($"https://dummyjson.com/products/{updated.id}", content(updated.Json())) 
+            >> ensureSuccessStatus
+            >> stream >> (deserialize<Product>);
 
         var updateFourthDescription =
             from product in fourthProduct
             let updated = product with { description = "The best product" }
-            from response in patch($"https://dummyjson.com/products/{product.id}", content(updated.Json())) 
-                             >> ensureSuccessStatus
-                             >> @string
+            from response in sendUpdateRequest(updated)
             from _0 in log($"Original: {product}")
             from _1 in log($"Updated: {response}")
             select unit;
 
-        updateFourthDescription.RunIO().Run();
+        updateFourthDescription.RunIO(EchoJsonClient).Run();
     }
-    
-    
+
+    /// <summary>
+    /// For some reason https://dummyjson.com/docs/products#products-update doesn't work as expected (or you're missing
+    /// something, more likely), so this provides a quick and dirty way for the last example to run without breaking
+    /// </summary>
+    public static readonly HttpClient EchoJsonClient = client(request => request.Content switch
+    {
+        JsonContent jsonContent => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = jsonContent
+        },
+        _ => (new HttpClient()).Send(new HttpRequestMessage(request.Method, request.RequestUri))
+    });
 }
