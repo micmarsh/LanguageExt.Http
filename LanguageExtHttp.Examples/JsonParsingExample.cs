@@ -54,7 +54,7 @@ public static class JsonParsingExample
     }
 
     /// <summary>
-    /// For some reason https://dummyjson.com/docs/products#products-update doesn't work as expected (or you're missing
+    /// For some reason https://dummyjson.com/docs/products#products-update doesn't work as expected (or I'm missing
     /// something, more likely), so this provides a quick and dirty way for the last example to run without breaking
     /// </summary>
     public static readonly HttpClient EchoJsonClient = client(request => request.Content switch
