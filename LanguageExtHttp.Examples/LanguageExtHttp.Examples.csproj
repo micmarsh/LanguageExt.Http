@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="LanguageExt.Json" Version="0.1.0" />
       <PackageReference Include="Polly" Version="8.6.4" />
     </ItemGroup>
 

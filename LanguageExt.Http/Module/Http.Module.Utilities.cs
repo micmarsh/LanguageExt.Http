@@ -53,7 +53,7 @@ public partial class Http
     
     public static HttpContent content(JsonWrapper value) => JsonContent.Create(value.Value);
 
-    public record JsonWrapper(object? Value);
+    public readonly record struct JsonWrapper(object? Value);
 
     public static Http<A> @try<A>(Func<A> run) => +@try<Http, A>(run);
     
