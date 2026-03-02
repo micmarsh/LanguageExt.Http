@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 namespace LanguageExtHttp.Examples;
 using LanguageExt;
-using static LanguageExt.Http;
+using static LanguageExt.Http<LanguageExt.Eff<ExampleEnv>, ExampleEnv>;
 using static LanguageExt.Prelude;
 using static LanguageExt.Json<LanguageExt.Eff<ExampleEnv>>;
 
@@ -24,14 +24,14 @@ public static class EffJsonParsingExample
     {
         // Demo of usage of "stream" and "deserialize" with .NET 10 operators
         var printFirstProduct =
-            get<Eff<ExampleEnv>, ExampleEnv>("https://dummyjson.com/products/1")
-            >> (stream<Eff<ExampleEnv>>) >> (deserialize<Product>) >> log;
+            get("https://dummyjson.com/products/1")
+            >> (Http.stream<Eff<ExampleEnv>>) >> (deserialize<Product>) >> log;
 
         printFirstProduct.RunUnsafe(Env);
 
         // Detail more intricate parsing of nested json structures
-        var allProducts = get<Eff<ExampleEnv>, ExampleEnv>("https://dummyjson.com/products") >>
-                             (stream<Eff<ExampleEnv>>) >> parse >>
+        var allProducts = get("https://dummyjson.com/products") >>
+                             (Http.stream<Eff<ExampleEnv>>) >> parse >>
                              key("products");
         var printAllTitles =
             from products in allProducts >> iterate
@@ -48,9 +48,9 @@ public static class EffJsonParsingExample
             allProducts >> index(3) >> cast<Product>;
 
         Eff<ExampleEnv, Product> sendUpdateRequest(Product updated) =>
-            patch<Eff<ExampleEnv>, ExampleEnv>($"https://dummyjson.com/products/{updated.id}", content(updated.Json())) 
-            >> (ensureSuccessStatus<Eff<ExampleEnv>>)
-            >> (stream<Eff<ExampleEnv>>) >> (deserialize<Product>);
+            Http.patch<Eff<ExampleEnv>, ExampleEnv>($"https://dummyjson.com/products/{updated.id}", Http.content(updated.Json())) 
+            >> (Http.ensureSuccessStatus<Eff<ExampleEnv>>)
+            >> (Http.stream<Eff<ExampleEnv>>) >> (deserialize<Product>);
 
         var updateFourthDescription =
             from product in fourthProduct
@@ -69,7 +69,7 @@ public static class EffJsonParsingExample
     /// For some reason https://dummyjson.com/docs/products#products-update doesn't work as expected (or I'm missing
     /// something, more likely), so this provides a quick and dirty way for the last example to run without breaking
     /// </summary>
-    public static readonly HttpClient EchoJsonClient = client(request => request.Content switch
+    public static readonly HttpClient EchoJsonClient = Http.client(request => request.Content switch
     {
         JsonContent jsonContent => new HttpResponseMessage(HttpStatusCode.OK)
         {
