@@ -5,26 +5,25 @@ namespace LanguageExt;
 
 public partial class Http
 {
-    public static K<M, HttpResponseMessage> delete<M, Env>([StringSyntax("Uri")] string url)
-        where M : Readable<M, Env>, MonadIO<M>
-        where Env : HasHttpClient
-        =>  from uri in parseUri<IO>(url).As()
-            from httpEnv in Readable.ask<M, Env>()
-            from response in deleteAsIO(uri, httpEnv)
-            select response;
-        
-    public static K<M, HttpResponseMessage> delete<M, Env>(Uri url)
-        where M : Readable<M, Env>, MonadIO<M>
-        where Env : HasHttpClient
-        => Readable.ask<M, Env>().Bind(httpEnv => deleteAsIO(url, httpEnv));
-
     public static Http<HttpResponseMessage> delete(Uri url) =>
-        delete<Http, HttpEnv>(url).As();
+        Http<Http, HttpEnv>.delete(url).As();
     
     public static Http<HttpResponseMessage> delete([StringSyntax("Uri")] string url) =>
-        delete<Http, HttpEnv>(url).As();
+        Http<Http, HttpEnv>.delete(url).As();
     
-    private static IO<HttpResponseMessage> deleteAsIO<Env>(Uri url, Env httpEnv) 
+    internal static IO<HttpResponseMessage> deleteAsIO<Env>(Uri url, Env httpEnv) 
         where Env : HasHttpClient  =>
         IO.liftAsync(env => httpEnv.Client.DeleteAsync(url, env.Token));
+}
+
+public static partial class Http<M, Env>
+{
+    public static K<M, HttpResponseMessage> delete([StringSyntax("Uri")] string url)
+        =>  from uri in parseUri(url)
+            from httpEnv in Readable.ask<M, Env>()
+            from response in Http.deleteAsIO(uri, httpEnv)
+            select response;
+    
+    public static K<M, HttpResponseMessage> delete(Uri url)
+        => Readable.ask<M, Env>() >> (httpEnv => Http.deleteAsIO(url, httpEnv));
 }

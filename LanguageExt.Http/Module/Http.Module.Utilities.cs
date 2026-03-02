@@ -61,8 +61,6 @@ public partial class Http
 }
 
 public static partial class Http<M, Env>
-    where M : Readable<M, Env>, MonadIO<M>, Fallible<M>
-    where Env : HasHttpClient
 {
     public static K<M, string> readContentAsString(HttpResponseMessage message)
         => Http.@string<M>(message);

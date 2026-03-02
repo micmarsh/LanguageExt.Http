@@ -21,7 +21,7 @@ public static partial class Http<M, Env>
     where Env : HasHttpClient
 {
     public static K<M, HttpResponseMessage> get([StringSyntax("Uri")] string url, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead)
-        =>  from uri in Http.parseUri<IO>(url).As()
+        =>  from uri in parseUri(url)
             from httpEnv in Readable.ask<M, Env>()
             from response in Http.getAsIO(uri, option, httpEnv)
             select response;

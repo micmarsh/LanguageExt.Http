@@ -5,26 +5,25 @@ namespace LanguageExt;
 
 public partial class Http
 {
-    public static K<M, HttpResponseMessage> put<M, Env>([StringSyntax("Uri")] string url, HttpContent content)
-        where M : Readable<M, Env>, MonadIO<M>
-        where Env : HasHttpClient
-        =>  from uri in parseUri<IO>(url).As()
-            from httpEnv in Readable.ask<M, Env>()
-            from response in putAsIO(uri, content, httpEnv)
-            select response;
-        
-    public static K<M, HttpResponseMessage> put<M, Env>(Uri url, HttpContent content)
-        where M : Readable<M, Env>, MonadIO<M>
-        where Env : HasHttpClient
-        => Readable.ask<M, Env>() >> (httpEnv => putAsIO(url, content, httpEnv));
-
     public static Http<HttpResponseMessage> put(Uri url, HttpContent content) =>
-        put<Http, HttpEnv>(url, content).As();
+        Http<Http, HttpEnv>.put(url, content).As();
     
     public static Http<HttpResponseMessage> put([StringSyntax("Uri")] string url, HttpContent content) =>
-        put<Http, HttpEnv>(url, content).As();
+        Http<Http, HttpEnv>.put(url, content).As();
     
-    private static IO<HttpResponseMessage> putAsIO<Env>(Uri url, HttpContent content, Env httpEnv) 
+    internal static IO<HttpResponseMessage> putAsIO<Env>(Uri url, HttpContent content, Env httpEnv) 
         where Env : HasHttpClient  =>
         IO.liftAsync(env => httpEnv.Client.PutAsync(url, content, env.Token));
+}
+
+public static partial class Http<M, Env>
+{
+    public static K<M, HttpResponseMessage> put([StringSyntax("Uri")] string url, HttpContent content)
+        =>  from uri in parseUri(url)
+            from httpEnv in Readable.ask<M, Env>()
+            from response in Http.putAsIO(uri, content, httpEnv)
+            select response;
+    
+    public static K<M, HttpResponseMessage> put(Uri url, HttpContent content)
+        => Readable.ask<M, Env>() >> (httpEnv => Http.putAsIO(url, content, httpEnv));
 }

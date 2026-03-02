@@ -22,3 +22,18 @@ public partial class Http
             => Run(request, cancellationToken);
     }
 }
+
+public static partial class Http<M, Env>
+{
+    public static HttpClient client(Func<HttpRequestMessage, CancellationToken, HttpResponseMessage> sendAsync) =>
+        Http.client(sendAsync);
+    
+    public static HttpClient client(Func<HttpRequestMessage, HttpResponseMessage> sendAsync) =>
+        Http.client(sendAsync);
+    
+    public static HttpClient client(Func<HttpRequestMessage, IO<HttpResponseMessage>> sendAsync) =>
+        Http.client(sendAsync);
+    
+    public static HttpClient client(Func<HttpRequestMessage, CancellationToken, Task<HttpResponseMessage>> sendAsync) =>
+        Http.client(sendAsync);
+}
