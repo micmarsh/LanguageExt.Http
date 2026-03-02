@@ -13,14 +13,14 @@ public partial class Http
 
     public static Http<A> Pure<A>(A item) => +Applicative.pure<Http, A>(item);
     
-    public static K<M, string> readContentAsString<M>(HttpResponseMessage message)
+    public static K<M, string> @string<M>(HttpResponseMessage message)
         where M : MonadIO<M>
         => MonadIO.liftIO<M, string>(IO.liftAsync(env =>
             message.Content.ReadAsStringAsync(env.Token))
         );
     
     public static Http<string> @string(HttpResponseMessage message) => 
-        readContentAsString<Http>(message).As();
+        @string<Http>(message).As();
         
     public static K<M, Stream> stream<M>(HttpResponseMessage message)
         where M : MonadIO<M>
@@ -51,13 +51,40 @@ public partial class Http
     public static HttpContent content(string value) =>
         new ByteArrayContent(Encoding.ASCII.GetBytes(value));
     
-    public static HttpContent content(JsonWrapper value) => 
+    public static HttpContent content(JsonRequestWrapper value) => 
         JsonContent.Create(value.Value, options: GlobalJsonConfig.Options);
-
-    public readonly record struct JsonWrapper(object? Value);
-
+    
     public static Http<A> @try<A>(Func<A> run) => +@try<Http, A>(run);
     
     public static K<M, A> @try<M, A>(Func<A> run) where M : Applicative<M>, Fallible<M>
         => Try.lift(run).Match(M.Pure, M.Fail<A>);
 }
+
+public static partial class Http<M, Env>
+    where M : Readable<M, Env>, MonadIO<M>, Fallible<M>
+    where Env : HasHttpClient
+{
+    public static K<M, string> readContentAsString(HttpResponseMessage message)
+        => Http.@string<M>(message);
+
+    public static K<M, Stream> stream(HttpResponseMessage message)
+        => Http.stream<M>(message);
+
+    public static K<M, Uri> parseUri(string url)
+        => @try(() => new Uri(url));
+    
+    public static K<M, HttpResponseMessage> ensureSuccessStatus(HttpResponseMessage r)
+        => @try(() =>
+        {
+            r.EnsureSuccessStatusCode();
+            return r;
+        });
+    
+    public static HttpContent content(string value) => Http.content(value);
+
+    public static HttpContent content(JsonRequestWrapper value) => Http.content(value);
+
+    public static K<M, A> @try<A>(Func<A> run) => Http.@try<M, A>(run);
+}
+
+public readonly record struct JsonRequestWrapper(object? Value);

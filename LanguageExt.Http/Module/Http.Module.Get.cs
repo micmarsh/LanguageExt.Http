@@ -17,7 +17,7 @@ public partial class Http
 }
 
 public static partial class Http<M, Env>
-    where M : Readable<M, Env>, MonadIO<M>
+    where M : Readable<M, Env>, MonadIO<M>, Fallible<M>
     where Env : HasHttpClient
 {
     public static K<M, HttpResponseMessage> get([StringSyntax("Uri")] string url, HttpCompletionOption option = HttpCompletionOption.ResponseContentRead)

@@ -31,7 +31,7 @@ public static class EffJsonParsingExample
 
         // Detail more intricate parsing of nested json structures
         var allProducts = get("https://dummyjson.com/products") >>
-                             (Http.stream<Eff<ExampleEnv>>) >> parse >>
+                             stream >> parse >>
                              key("products");
         var printAllTitles =
             from products in allProducts >> iterate
@@ -48,9 +48,9 @@ public static class EffJsonParsingExample
             allProducts >> index(3) >> cast<Product>;
 
         Eff<ExampleEnv, Product> sendUpdateRequest(Product updated) =>
-            Http.patch<Eff<ExampleEnv>, ExampleEnv>($"https://dummyjson.com/products/{updated.id}", Http.content(updated.Json())) 
-            >> (Http.ensureSuccessStatus<Eff<ExampleEnv>>)
-            >> (Http.stream<Eff<ExampleEnv>>) >> (deserialize<Product>);
+            Http.patch<Eff<ExampleEnv>, ExampleEnv>($"https://dummyjson.com/products/{updated.id}", content(updated.Json())) 
+            >> ensureSuccessStatus
+            >> stream >> (deserialize<Product>);
 
         var updateFourthDescription =
             from product in fourthProduct
