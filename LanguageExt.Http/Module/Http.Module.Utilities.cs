@@ -51,7 +51,8 @@ public partial class Http
     public static HttpContent content(string value) =>
         new ByteArrayContent(Encoding.ASCII.GetBytes(value));
     
-    public static HttpContent content(JsonWrapper value) => JsonContent.Create(value.Value);
+    public static HttpContent content(JsonWrapper value) => 
+        JsonContent.Create(value.Value, options: GlobalJsonConfig.Options);
 
     public readonly record struct JsonWrapper(object? Value);
 

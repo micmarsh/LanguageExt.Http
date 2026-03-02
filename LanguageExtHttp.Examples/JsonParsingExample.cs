@@ -9,7 +9,7 @@ using static LanguageExt.Json<LanguageExt.Http>;
 
 public static class JsonParsingExample
 {
-    public record Product(int id, string title, string description);
+    public record Product(int id, string title, string description, Seq<string> tags);
 
     private static IO<Unit> log(object? obj) => IO.lift(() => Console.WriteLine(obj));
     
