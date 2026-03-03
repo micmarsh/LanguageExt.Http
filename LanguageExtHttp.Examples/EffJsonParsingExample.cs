@@ -3,8 +3,8 @@ using System.Net.Http.Json;
 
 namespace LanguageExtHttp.Examples;
 using LanguageExt;
-using static LanguageExt.Http<LanguageExt.Eff<ExampleEnv>, ExampleEnv>;
 using static LanguageExt.Prelude;
+using static LanguageExt.Http<LanguageExt.Eff<ExampleEnv>, ExampleEnv>;
 using static LanguageExt.Json<LanguageExt.Eff<ExampleEnv>>;
 
 public static class EffJsonParsingExample
@@ -48,7 +48,7 @@ public static class EffJsonParsingExample
             allProducts >> index(3) >> cast<Product>;
 
         Eff<ExampleEnv, Product> sendUpdateRequest(Product updated) =>
-            Http.patch<Eff<ExampleEnv>, ExampleEnv>($"https://dummyjson.com/products/{updated.id}", content(updated.Json())) 
+            patch($"https://dummyjson.com/products/{updated.id}", content(updated.Json())) 
             >> ensureSuccessStatus
             >> stream >> (deserialize<Product>);
 
