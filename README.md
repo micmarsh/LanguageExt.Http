@@ -37,8 +37,8 @@ select results
 ```csharp
 get("http://api-one.url/old_users").Bind(parseUsersResponse) 
     // error codes and handlers made up for example purposes
-    | @catch<Http, Seq<Users>>(ParseErrorCode, HandleParseError)
-    | @catch<Http, Seq<Users>>(UrlErrorcode, HandleUrlError)
+    | @catch<Http, Seq<User>>(ParseErrorCode, HandleParseError)
+    | @catch<Http, Seq<User>>(UrlErrorCode, HandleUrlError)
 ```
 * `MonadUnliftIO` for not only lifting arbitrary IO operations (such as debugging logs), but also access to `Retry`, `Fork`, `Repeat` and related goodes
 ```csharp
@@ -54,7 +54,7 @@ lookup.RetryIO(Schedule.linear(1.Seconds()).Take(3));
   * If you need to thread `CancellationToken` as well, you can utilize `IO`'s built-in `EnvIO`
 ```csharp
 get("http://example.com")
-    .Run(new HttpClient()) // Run HTTP Monad
+    .RunIO(new HttpClient()) // Run HTTP Monad
     .Run(EnvIO.New(token: cancellationToken)); // Normal IO Monad run
 ```
 ### Usage in Larger Applications 
@@ -100,7 +100,7 @@ getStreamWithDebug<MyCustomApp, MyCustomConfig>("http://example.com");
 ### Testing
 Mocking `HttpClient` [is much more awkward than it should be](https://stackoverflow.com/questions/36425008/mocking-httpclient-in-unit-tests), so this library provides a `Http.client` method that, given a `Func<HttpResponseMessage, HttpResponseMessage>` ( [or other overload](https://github.com/micmarsh/LanguageExt.Http/blob/master/LanguageExt.Net.Http/Module/Http.Module.Client.cs) ) handles all of the nasty business of dealing with an `HttpMessageHandler` for you.
 ```csharp
-var mockHttpClient = Http.client((HttpResponseMessage message) => new HttpResponseMessage(HttpStatusCode.OK));
+var mockHttpClient = Http.client((HttpRequestMessage message) => new HttpResponseMessage(HttpStatusCode.OK));
 ```
 This combined with the natural structure of the "reader monad pattern" this follows should enable much smoother mocking of http functionality in general. It may even be convenient enough to justify sneaking this library (and by extension LanguageExt) into a "regular" imperative/OO codebase that uses `HttpClient`!
 
