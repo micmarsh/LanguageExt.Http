@@ -13,14 +13,14 @@ public partial class Http
 
     public static Http<A> Pure<A>(A item) => +Applicative.pure<Http, A>(item);
     
-    public static K<M, string> readContentAsString<M>(HttpResponseMessage message)
+    public static K<M, string> @string<M>(HttpResponseMessage message)
         where M : MonadIO<M>
         => MonadIO.liftIO<M, string>(IO.liftAsync(env =>
             message.Content.ReadAsStringAsync(env.Token))
         );
     
     public static Http<string> @string(HttpResponseMessage message) => 
-        readContentAsString<Http>(message).As();
+        @string<Http>(message).As();
         
     public static K<M, Stream> stream<M>(HttpResponseMessage message)
         where M : MonadIO<M>
