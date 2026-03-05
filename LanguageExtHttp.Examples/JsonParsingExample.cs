@@ -38,7 +38,7 @@ public static class JsonParsingExample
             allProducts >> index(3) >> cast<Product>;
 
         Http<Product> sendUpdateRequest(Product updated) =>
-            patch($"https://dummyjson.com/products/{updated.id}", content(updated.Json())) 
+            patch($"https://dummyjson.com/products/{updated.id}", jsonContent(updated)) 
             >> ensureSuccessStatus
             >> stream >> (deserialize<Product>);
 

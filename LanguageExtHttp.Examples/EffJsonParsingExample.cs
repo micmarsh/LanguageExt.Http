@@ -48,7 +48,7 @@ public static class EffJsonParsingExample
             allProducts >> index(3) >> cast<Product>;
 
         Eff<ExampleEnv, Product> sendUpdateRequest(Product updated) =>
-            patch<Eff<ExampleEnv>, ExampleEnv>($"https://dummyjson.com/products/{updated.id}", content(updated.Json())) 
+            patch<Eff<ExampleEnv>, ExampleEnv>($"https://dummyjson.com/products/{updated.id}", jsonContent(updated)) 
             >> (ensureSuccessStatus<Eff<ExampleEnv>>)
             >> (stream<Eff<ExampleEnv>>) >> (deserialize<Product>);
 

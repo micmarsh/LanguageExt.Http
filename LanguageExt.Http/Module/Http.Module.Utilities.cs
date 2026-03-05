@@ -51,11 +51,9 @@ public partial class Http
     public static HttpContent content(string value) =>
         new ByteArrayContent(Encoding.ASCII.GetBytes(value));
     
-    public static HttpContent content(JsonWrapper value) => 
-        JsonContent.Create(value.Value, options: GlobalJsonConfig.Options);
-
-    public readonly record struct JsonWrapper(object? Value);
-
+    public static HttpContent jsonContent(object? value) => 
+        JsonContent.Create(value, options: GlobalJsonConfig.Options);
+    
     public static Http<A> @try<A>(Func<A> run) => +@try<Http, A>(run);
     
     public static K<M, A> @try<M, A>(Func<A> run) where M : Applicative<M>, Fallible<M>

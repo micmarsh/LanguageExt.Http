@@ -57,6 +57,17 @@ get("http://example.com")
     .RunIO(new HttpClient()) // Run HTTP Monad
     .Run(EnvIO.New(token: cancellationToken)); // Normal IO Monad run
 ```
+
+### JSON Requests
+#### Parsing
+Parsing JSON responses is outsourced almost entirely to [LanguageExt.Json](https://github.com/micmarsh/LanguageExt.Json) (included
+as a depenedency to this library)
+
+That library's documentation as well as the [json parsing example in this repo](https://github.com/micmarsh/LanguageExt.Http/blob/master/LanguageExtHttp.Examples/JsonParsingExample.cs) are hopefully
+sufficiently instructive.
+
+#### Serializing
+
 ### Usage in Larger Applications 
 
 However, since a concrete `Http` type is an obstacle to composition in large applications, nearly every method in this library has both an `Http`-based and generalized version, for exmaple
