@@ -1,11 +1,9 @@
 # LanguageExt HTTP
 
-### WIP I'm currently in the process of cleaning this up for a non-alpha release, some of this documentation may not be accurate
-
 A functional wrapper around HttpClient intended to integrate into [LanguageExt V5](https://github.com/louthy/language-ext) based workflows.
 
 Provides the expected methods (`get`, `post`, `delete`, etc.) returning either `Http<HttpResponseMessage>`, an "Http Monad", or a
-custom type (see ["Usage in Larger Applications"](todo this from gh) below)
+custom type (see ["Usage in Larger Applications"](https://github.com/micmarsh/LanguageExt.Http#usage-in-larger-applications) below)
 
 ## Rationale
 If you're already convinced of the general preferability of the functional approach, you probably don't need this `Rationale` section.
@@ -17,7 +15,7 @@ I may create a more dedicated "literate coding" style writeup of the above in th
 [^1] Simplicity in the [Rich Hickey sense of the word](https://www.youtube.com/watch?v=SxdOUGdseq4), it may not be _easy_ at first if you're not familiar with the concepts!
 
 ## Usage
-Add `LanguageExt.Net.Http 0.1.0-alpha-4` on nuget.
+Add `LanguageExt.Net.Http 0.1.0` on nuget.
 
 ```csharp
 // add to GlobalUsings as appropriate
@@ -113,15 +111,19 @@ public record MyCustomApp<A>(ReaderT<MyCustomConfig, IO, A> run) : K<MyCustomApp
 getStreamWithDebug<MyCustomApp, MyCustomConfig>("http://example.com");
 ```
 
+There's also a [branch "static-module-import"](https://github.com/micmarsh/LanguageExt.Http/tree/static-module-imports) that experiments with ["Module Style" using statements](https://github.com/micmarsh/LanguageExt.Json?tab=readme-ov-file#module-style-static-import) that I 
+may try to merge int master and release if this the above approach with the per-method type parameters ends up being too cumbersome for too many people.
 
 ### Testing
-Mocking `HttpClient` [is much more awkward than it should be](https://stackoverflow.com/questions/36425008/mocking-httpclient-in-unit-tests), so this library provides a `Http.client` method that, given a `Func<HttpResponseMessage, HttpResponseMessage>` ( [or other overload](https://github.com/micmarsh/LanguageExt.Http/blob/master/LanguageExt.Net.Http/Module/Http.Module.Client.cs) ) handles all of the nasty business of dealing with an `HttpMessageHandler` for you.
+Mocking `HttpClient` [is much more awkward than it should be](https://stackoverflow.com/questions/36425008/mocking-httpclient-in-unit-tests), so this library provides a `Http.client` method that, given a `Func<HttpResponseMessage, HttpResponseMessage>` ( [or other overload](https://github.com/micmarsh/LanguageExt.Http/blob/master/LanguageExt.Http/Module/Http.Module.Client.cs) ) handles all of the nasty business of dealing with an `HttpMessageHandler` for you.
 ```csharp
 var mockHttpClient = Http.client((HttpRequestMessage message) => new HttpResponseMessage(HttpStatusCode.OK));
 ```
 This combined with the natural structure of the "reader monad pattern" this follows should enable much smoother mocking of http functionality in general. It may even be convenient enough to justify sneaking this library (and by extension LanguageExt) into a "regular" imperative/OO codebase that uses `HttpClient`!
 
 ## TODO
+https://github.com/micmarsh/LanguageExt.Http/issues
+
 There's a lot of work to be done on "the LanguageExt ecosystem" in general, as V5 itself is technically still in beta. 
 Feel free to open discussions, issues or PRs to communicate how this library can better fit your particular use case
 
