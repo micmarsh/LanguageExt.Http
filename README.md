@@ -63,7 +63,7 @@ get("http://example.com")
 Parsing JSON responses is outsourced almost entirely to [LanguageExt.Json](https://github.com/micmarsh/LanguageExt.Json) (included
 as a depenedency to this library)
 
-That library's documentation as well as the [json parsing example in this repo](https://github.com/micmarsh/LanguageExt.Http/blob/master/LanguageExtHttp.Examples/JsonParsingExample.cs) are hopefully
+That [library's documentation](https://github.com/micmarsh/LanguageExt.Json/blob/master/README.md) as well as the [json parsing example in this repo](https://github.com/micmarsh/LanguageExt.Http/blob/master/LanguageExtHttp.Examples/JsonParsingExample.cs) are hopefully
 sufficiently instructive.
 
 #### Serializing
