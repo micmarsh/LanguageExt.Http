@@ -16,8 +16,6 @@ public static class HttpExt
     public static Http<C> SelectMany<A, B, C>(this Ask<HttpEnv, A> ask, Func<A, Http<B>> bind, Func<A, B, C> project) =>
         ((Http<A>)ask).SelectMany(bind, project);
     
-    public static JsonRequestWrapper Json(this object? value) => new (value);
-    
     extension<A, B>(K<Http, A> self)
     {
         /// <summary>
@@ -37,6 +35,29 @@ public static class HttpExt
         /// <param name="rhs">Second action to run</param>
         /// <returns>Result of the second action</returns>
         public static Http<B> operator >> (K<Http, A> lhs, K<Http, B> rhs) =>
+            lhs >> (_ => rhs);
+    }
+    
+     
+    extension<A, B>(K<IO, A> self)
+    {
+        /// <summary>
+        /// Monad bind operator
+        /// </summary>
+        /// <param name="io">Monad to bind</param>
+        /// <param name="f">Binding function</param>
+        /// <returns>Mapped monad</returns>
+        public static Http<B> operator >> (K<IO, A> io, Func<A, K<Http, B>> f) =>
+            +io.Bind(f);
+        
+        /// <summary>
+        /// Sequentially compose two actions, discarding any value produced by the first, like sequencing operators (such
+        /// as the semicolon) in C#.
+        /// </summary>
+        /// <param name="lhs">First action to run</param>
+        /// <param name="rhs">Second action to run</param>
+        /// <returns>Result of the second action</returns>
+        public static Http<B> operator >> (K<IO, A> lhs, K<Http, B> rhs) =>
             lhs >> (_ => rhs);
     }
     

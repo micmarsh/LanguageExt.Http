@@ -51,8 +51,8 @@ public partial class Http
     public static HttpContent content(string value) =>
         new ByteArrayContent(Encoding.ASCII.GetBytes(value));
     
-    public static HttpContent content(JsonRequestWrapper value) => 
-        JsonContent.Create(value.Value, options: GlobalJsonConfig.Options);
+    public static HttpContent jsonContent(object? value) => 
+        JsonContent.Create(value, options: GlobalJsonConfig.Options);
     
     public static Http<A> @try<A>(Func<A> run) => +@try<Http, A>(run);
     
@@ -80,7 +80,7 @@ public static partial class Http<M, Env>
     
     public static HttpContent content(string value) => Http.content(value);
 
-    public static HttpContent content(JsonRequestWrapper value) => Http.content(value);
+    public static HttpContent jsonContent(object? value) => Http.jsonContent(value);
 
     public static K<M, A> @try<A>(Func<A> run) => Http.@try<M, A>(run);
 }

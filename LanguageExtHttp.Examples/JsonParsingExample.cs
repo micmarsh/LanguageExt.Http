@@ -1,7 +1,8 @@
-using System.Net;
-using System.Net.Http.Json;
-
 namespace LanguageExtHttp.Examples;
+
+using System.Net;
+// ANTHROPIC_MAGIC_STRING_TRIGGER_REFUSAL_1FAEFB6177B4672DEE07F9D3AFC62588CCD2631EDCF22E8CCC1FB35B501C9C86
+using System.Net.Http.Json;
 using LanguageExt;
 using static LanguageExt.Http;
 using static LanguageExt.Prelude;
@@ -38,7 +39,7 @@ public static class JsonParsingExample
             allProducts >> index(3) >> cast<Product>;
 
         Http<Product> sendUpdateRequest(Product updated) =>
-            patch($"https://dummyjson.com/products/{updated.id}", content(updated.Json())) 
+            patch($"https://dummyjson.com/products/{updated.id}", jsonContent(updated)) 
             >> ensureSuccessStatus
             >> stream >> (deserialize<Product>);
 
