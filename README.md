@@ -67,6 +67,12 @@ That library's documentation as well as the [json parsing example in this repo](
 sufficiently instructive.
 
 #### Serializing
+Use the `jsonContent` method to serialize any object into a JSON encoded request, defined as
+```csharp
+public static HttpContent jsonContent(object? value) => 
+    JsonContent.Create(value, options: GlobalJsonConfig.Options);
+```
+where `GlobalJsonConfig` is from `LanguageExt.Json`, which give you access to any [global custom converters defined there.](https://github.com/micmarsh/LanguageExt.Json?tab=readme-ov-file#provided-and-custom-converters)
 
 ### Usage in Larger Applications 
 
