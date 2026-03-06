@@ -15,7 +15,7 @@ I may create a more dedicated "literate coding" style writeup of the above in th
 [^1] Simplicity in the [Rich Hickey sense of the word](https://www.youtube.com/watch?v=SxdOUGdseq4), it may not be _easy_ at first if you're not familiar with the concepts!
 
 ## Usage
-Add `LanguageExt.Net.Http 0.1.0` on nuget.
+`dotnet add package LanguageExt.Http` or `LanguageExt.Http` on nuget
 
 ```csharp
 // add to GlobalUsings as appropriate
