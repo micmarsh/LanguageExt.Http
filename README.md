@@ -112,7 +112,7 @@ getStreamWithDebug<MyCustomApp, MyCustomConfig>("http://example.com");
 ```
 
 There's also a [branch "static-module-import"](https://github.com/micmarsh/LanguageExt.Http/tree/static-module-imports) that experiments with ["Module Style" using statements](https://github.com/micmarsh/LanguageExt.Json?tab=readme-ov-file#module-style-static-import) that I 
-may try to merge int master and release if this the above approach with the per-method type parameters ends up being too cumbersome for too many people.
+may try to merge into master and release if the above approach with the per-method type parameters ends up being too cumbersome for too many people.
 
 ### Testing
 Mocking `HttpClient` [is much more awkward than it should be](https://stackoverflow.com/questions/36425008/mocking-httpclient-in-unit-tests), so this library provides a `Http.client` method that, given a `Func<HttpResponseMessage, HttpResponseMessage>` ( [or other overload](https://github.com/micmarsh/LanguageExt.Http/blob/master/LanguageExt.Http/Module/Http.Module.Client.cs) ) handles all of the nasty business of dealing with an `HttpMessageHandler` for you.
